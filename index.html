@@ -1,38 +1,133 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>NextGen</title>
+<meta charset="UTF-8">
+<title>Kunal Digital Agency</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
+
 <style>
-body{margin:0;font-family:sans-serif;background:#020617;color:white}
-.hero{height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;
-background:radial-gradient(circle,#8b5cf6,#020617)}
-.btn{background:#22d3ee;color:black;padding:14px 30px;border-radius:50px;
-text-decoration:none;box-shadow:0 0 20px #22d3ee}
-.card{background:#1e293b;padding:25px;margin:20px;border-radius:15px;
-transition:0.3s}
-.card:hover{box-shadow:0 0 25px #8b5cf6;transform:scale(1.05)}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Poppins;}
+body{background:#020617;color:white;overflow-x:hidden}
+
+.hero{
+height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+text-align:center;
+background:linear-gradient(120deg,#000,#1e293b);
+}
+
+.hero h1{font-size:3rem}
+.hero p{opacity:0.8;margin:15px}
+
+.btn{
+padding:14px 30px;
+background:#22c55e;
+color:black;
+border-radius:40px;
+text-decoration:none;
+font-weight:bold;
+display:inline-block;
+transition:0.3s;
+}
+.btn:hover{transform:scale(1.05)}
+
+.section{padding:80px 10%;text-align:center}
+
+.cards{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:30px;
+margin-top:40px;
+}
+
+.card{
+background:#0f172a;
+padding:30px;
+border-radius:20px;
+transition:0.4s;
+opacity:0;
+transform:translateY(40px);
+}
+.card:hover{
+box-shadow:0 0 20px #22c55e;
+transform:scale(1.05);
+}
+
+footer{
+padding:30px;
+text-align:center;
+opacity:0.5;
+}
+
+.whatsapp{
+position:fixed;
+bottom:20px;
+right:20px;
+background:#25D366;
+color:white;
+padding:15px 22px;
+border-radius:50px;
+text-decoration:none;
+font-weight:bold;
+box-shadow:0 0 15px #25D366;
+}
 </style>
 </head>
 <body>
 
 <div class="hero">
 <div>
-<h1>Future Brand</h1>
-<p>Stand out online</p>
-<a class="btn" href="https://wa.me/919999999999">Launch Now</a>
+<h1>Grow Your Business Online</h1>
+<p>Modern website that brings real customers</p>
+<a href="#contact" class="btn">Get Free Demo</a>
 </div>
 </div>
 
-<div class="card">Neon Design</div>
-<div class="card">Super Fast</div>
-<div class="card">24x7 Online</div>
+<div class="section">
+<h2>Why You Need Website?</h2>
+<div class="cards">
+<div class="card">24x7 Online Presence</div>
+<div class="card">More Trust From Customers</div>
+<div class="card">Direct WhatsApp Leads</div>
+</div>
+</div>
+
+<div class="section">
+<h2>Our Services</h2>
+<div class="cards">
+<div class="card">Business Website</div>
+<div class="card">WhatsApp Integration</div>
+<div class="card">Google Map Setup</div>
+</div>
+</div>
+
+<div id="contact" class="section">
+<h2>Contact Now</h2>
+<p>Click below to talk directly on WhatsApp</p>
+<a href="https://wa.me/919999999999" class="btn">Chat on WhatsApp</a>
+</div>
+
+<footer>
+© 2026 Kunal Digital Agency
+</footer>
+
+<a class="whatsapp" href="https://wa.me/919999999999">WhatsApp</a>
 
 <script>
-document.addEventListener("mousemove",e=>{
- document.body.style.backgroundPosition=
-  `${e.clientX/50}px ${e.clientY/50}px`;
+const cards=document.querySelectorAll('.card');
+window.addEventListener('scroll',()=>{
+cards.forEach(c=>{
+let top=c.getBoundingClientRect().top;
+if(top<window.innerHeight-100){
+c.style.opacity=1;
+c.style.transform="translateY(0)";
+}
+});
 });
 </script>
+
 </body>
-</html>
+ </html>
