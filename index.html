@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>NextGen</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body{margin:0;font-family:sans-serif;background:#020617;color:white}
+.hero{height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;
+background:radial-gradient(circle,#8b5cf6,#020617)}
+.btn{background:#22d3ee;color:black;padding:14px 30px;border-radius:50px;
+text-decoration:none;box-shadow:0 0 20px #22d3ee}
+.card{background:#1e293b;padding:25px;margin:20px;border-radius:15px;
+transition:0.3s}
+.card:hover{box-shadow:0 0 25px #8b5cf6;transform:scale(1.05)}
+</style>
+</head>
+<body>
+
+<div class="hero">
+<div>
+<h1>Future Brand</h1>
+<p>Stand out online</p>
+<a class="btn" href="https://wa.me/919999999999">Launch Now</a>
+</div>
+</div>
+
+<div class="card">Neon Design</div>
+<div class="card">Super Fast</div>
+<div class="card">24x7 Online</div>
+
+<script>
+document.addEventListener("mousemove",e=>{
+ document.body.style.backgroundPosition=
+  `${e.clientX/50}px ${e.clientY/50}px`;
+});
+</script>
+</body>
+</html>
