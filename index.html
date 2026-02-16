@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>💪 गोल्ड जिम · ULTRA PRO MAX</title>
+    <title>💪 गोल्ड जिम · ULTRA PRO</title>
     <style>
         * {
             margin: 0;
@@ -190,6 +190,15 @@
             color: #7f9fd0;
             padding: 30px;
         }
+        .viewer-message {
+            background: #2a3a60;
+            color: #ffaa66;
+            padding: 15px;
+            border-radius: 40px;
+            text-align: center;
+            margin: 20px 0;
+            font-size: 18px;
+        }
     </style>
 </head>
 <body>
@@ -208,6 +217,11 @@
         </a>
     </div>
 
+    <!-- Viewer Mode Message (सिर्फ उनके लिए जो मालिक नहीं हैं) -->
+    <div class="viewer-message" id="viewerMessage" style="display: none;">
+        🔍 आप देख सकते हैं, एडिट या डिलीट नहीं कर सकते। केवल मालिक ही बदलाव कर सकता है।
+    </div>
+
     <!-- Password Box (हर बार पासवर्ड माँगेगा) -->
     <div class="password-box" id="passwordBox">
         <h2 style="color: gold;">🔐 एडमिन पैनल खोलें</h2>
@@ -218,7 +232,7 @@
     </div>
 
     <!-- Owner Setup Box (सिर्फ मालिक बनने के लिए) -->
-    <div class="password-box" id="ownerSetupBox" style="border-color: #25D366;">
+    <div class="password-box" id="ownerSetupBox" style="border-color: #25D366; display: none;">
         <h2 style="color: #25D366;">👑 इस डिवाइस को मालिक बनाएं</h2>
         <p>अगर आप इस जिम के असली मालिक हैं, तो नीचे पासवर्ड डालें।</p>
         <input type="password" class="password-input" id="ownerPasswordInput" placeholder="मालिक पासवर्ड डालें">
@@ -274,7 +288,7 @@
     <h2 style="margin-top: 40px;">📋 सदस्य सूची</h2>
     <div class="members-grid" id="membersList"></div>
 
-    <div class="footer">✨ ULTRA PRO MAX · सिर्फ मालिक हटा सकता है</div>
+    <div class="footer">✨ ULTRA PRO · सिर्फ मालिक हटा सकता है</div>
 </div>
 
 <script>
@@ -332,6 +346,7 @@
             localStorage.setItem(OWNER_KEY, DEVICE_ID);
             isOwner = true;
             document.getElementById('ownerSetupBox').style.display = 'none';
+            document.getElementById('viewerMessage').style.display = 'none';
             alert('✅ यह डिवाइस अब मालिक बन गया है! अब आप एडमिन पासवर्ड डालकर पैनल खोल सकते हैं।');
             renderAll(); // रेंडर करो ताकि डिलीट बटन दिखने लगे
         } else {
@@ -363,7 +378,9 @@
         let membersHtml = '';
         gymData.members.forEach(m => {
             let dateStr = m.date.split('-').reverse().join('-');
-            membersHtml += `
+            
+            // मेम्बर कार्ड बनाओ
+            let cardHtml = `
                 <div class="member-card">
                     <div class="member-name">${m.name}</div>
                     <div class="member-detail"><span>📞 फोन</span> <strong>${m.phone}</strong></div>
@@ -372,22 +389,28 @@
                         <strong class="${m.status === 'पेड' ? 'paid' : 'due'}">${m.status}</strong>
                     </div>
                     <div class="member-detail"><span>📅 तारीख</span> <strong>${dateStr}</strong></div>
-                    <!-- डिलीट बटन सिर्फ मालिक को दिखेगा -->
-                    ${isOwner ? `
-                        <button class="btn btn-red" style="width:100%; margin-top:15px;" onclick="deleteMember(${m.id})">🗑️ हटाएँ</button>
-                    ` : ''}
-                    <!-- व्हाट्सएप रिमाइंडर सबको दिखेगा -->
-                    <button class="btn btn-green" style="width:100%; margin-top:10px;" onclick="sendReminder('${m.name}', '${m.phone}', ${m.amount}, '${m.status}')">💬 बकाया याद दिलाएँ</button>
-                </div>
             `;
+            
+            // डिलीट बटन सिर्फ तब जोड़ो जब isOwner सही (true) हो
+            if (isOwner) {
+                cardHtml += `<button class="btn btn-red" style="width:100%; margin-top:15px;" onclick="deleteMember(${m.id})">🗑️ हटाएँ</button>`;
+            }
+            
+            // व्हाट्सएप रिमाइंडर सबके लिए
+            cardHtml += `<button class="btn btn-green" style="width:100%; margin-top:10px;" onclick="sendReminder('${m.name}', '${m.phone}', ${m.amount}, '${m.status}')">💬 बकाया याद दिलाएँ</button>`;
+            
+            cardHtml += `</div>`;
+            membersHtml += cardHtml;
         });
         document.getElementById('membersList').innerHTML = membersHtml;
 
-        // Owner Setup Box दिखाना या छुपाना - सिर्फ तब दिखे जब यह डिवाइस मालिक नहीं है
-        if (!isOwner) {
-            document.getElementById('ownerSetupBox').style.display = 'block';
-        } else {
+        // Owner Setup Box और Viewer Message दिखाना/छुपाना
+        if (isOwner) {
             document.getElementById('ownerSetupBox').style.display = 'none';
+            document.getElementById('viewerMessage').style.display = 'none';
+        } else {
+            document.getElementById('ownerSetupBox').style.display = 'block';
+            document.getElementById('viewerMessage').style.display = 'block';
         }
     }
 
@@ -437,7 +460,10 @@
     };
 
     window.deleteMember = function(id) {
-        if (!isOwner) return; // डिलीट सिर्फ मालिक कर सकता है
+        if (!isOwner) {
+            alert('❌ आप मालिक नहीं हैं, इसलिए हटा नहीं सकते।');
+            return;
+        }
         if (confirm('क्या सच में हटा दें?')) {
             gymData.members = gymData.members.filter(m => m.id !== id);
             saveData();
