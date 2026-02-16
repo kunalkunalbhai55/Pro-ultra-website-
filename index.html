@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> 💪 गोल्ड जिम · PRO MAX </title>
+    <title> 💪 गोल्ड जिम · PRO ULTRA </title>
     <style>
         * {
             margin: 0;
@@ -74,6 +74,7 @@
             gap: 10px;
             justify-content: center;
             margin-top: 10px;
+            flex-wrap: wrap;
         }
 
         .notice-input {
@@ -84,6 +85,7 @@
             color: white;
             font-size: 18px;
             width: 300px;
+            max-width: 100%;
         }
 
         /* WhatsApp Block */
@@ -181,6 +183,14 @@
             justify-content: center;
             min-height: 200px;
             margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .bar-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 60px;
         }
 
         .bar {
@@ -192,12 +202,17 @@
             font-size: 12px;
             color: black;
             font-weight: bold;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            padding-top: 5px;
         }
 
         .bar-label {
             margin-top: 10px;
             font-size: 14px;
             color: white;
+            text-align: center;
         }
 
         /* Members Grid */
@@ -234,6 +249,8 @@
 
         .badge-paid { color: #a0ffb0; font-weight: 700; }
         .badge-due { color: #ffaa66; font-weight: 700; }
+        .badge-expiry-soon { color: #ffaa66; font-weight: 700; }
+        .badge-expired { color: #ff6666; font-weight: 700; }
 
         .member-date, .member-expiry {
             background: rgba(0, 150, 255, 0.2);
@@ -353,8 +370,13 @@
             color: #7f9fd0;
             padding: 30px;
         }
+
+        @media print {
+            .admin-panel, .password-box, .whatsapp-mirror, .month-tabs, .notice-edit, .backup-buttons, .owner-toggle {
+                display: none !important;
+            }
+        }
     </style>
-    <!-- Chart.js for graph (optional, but we'll use simple canvas later) -->
 </head>
 <body>
 <div class="container">
@@ -391,13 +413,13 @@
 
     <!-- Admin Panel (Hidden) -->
     <div class="admin-panel" id="adminPanel" style="display: none;">
-        <div class="admin-title">⚙️ एडमिन पैनल (PRO MAX)</div>
+        <div class="admin-title">⚙️ एडमिन पैनल (PRO ULTRA)</div>
 
         <!-- Gym Info -->
         <h3 style="color:cyan;">🏢 जिम की जानकारी</h3>
         <div class="admin-form">
-            <input class="admin-input" id="gymNameInput" placeholder="जिम का नाम">
-            <input class="admin-input" id="ownerNameInput" placeholder="मालिक का नाम">
+            <input class="admin-input" id="gymNameInput" placeholder="जिम का नाम" value="गोल्ड जिम">
+            <input class="admin-input" id="ownerNameInput" placeholder="मालिक का नाम" value="राजेश कुमार">
             <button class="admin-btn" onclick="updateGymInfo()">✅ अपडेट</button>
         </div>
 
@@ -410,8 +432,8 @@
             <input class="admin-input" id="memberName" placeholder="नाम">
             <input class="admin-input" type="number" id="memberPhone" placeholder="फोन नंबर">
             <input class="admin-input" type="number" id="memberAmount" placeholder="राशी">
-            <input class="admin-input" type="date" id="memberDate">
-            <input class="admin-input" type="date" id="memberExpiry">
+            <input class="admin-input" type="date" id="memberDate" value="2026-02-16">
+            <input class="admin-input" type="date" id="memberExpiry" value="2026-03-16">
             <select class="admin-input" id="memberStatus">
                 <option value="पेड">✅ पेड</option>
                 <option value="बकाया">⏳ बकाया</option>
@@ -444,7 +466,7 @@
     <h2 style="margin: 30px 0 20px;">📋 सदस्य सूची (एक्सपायरी के साथ)</h2>
     <div class="members-grid" id="membersList"></div>
 
-    <div class="footer">✨ PRO MAX EDITION · सभी फीचर्स के साथ</div>
+    <div class="footer">✨ PRO ULTRA EDITION · सभी फीचर्स के साथ</div>
 </div>
 
 <script>
@@ -475,6 +497,13 @@
                     { month: "फरवरी 2026", amount: 3000, status: "पेड", date: "2026-02-05" }
                 ],
                 expiry: "2026-03-05"
+            },
+            "राहुल": {
+                phone: "9876543213",
+                history: [
+                    { month: "फरवरी 2026", amount: 1500, status: "बकाया", date: "2026-02-01" }
+                ],
+                expiry: "2026-03-01"
             }
         }
     };
@@ -485,16 +514,20 @@
 
     // Load & Save
     function loadData() {
-        let saved = localStorage.getItem('gymProMaxData');
+        let saved = localStorage.getItem('gymProUltraData');
         if (saved) {
-            gymData = JSON.parse(saved);
-            // Ensure monthsList is updated from history
-            updateMonthsList();
+            try {
+                gymData = JSON.parse(saved);
+            } catch (e) {
+                console.log('Error loading data, using default');
+            }
         }
+        updateMonthsList();
     }
     loadData();
+
     function saveData() { 
-        localStorage.setItem('gymProMaxData', JSON.stringify(gymData)); 
+        localStorage.setItem('gymProUltraData', JSON.stringify(gymData)); 
     }
 
     function updateMonthsList() {
@@ -502,8 +535,13 @@
         for (let name in gymData.members) {
             gymData.members[name].history.forEach(h => allMonths.add(h.month));
         }
-        monthsList = Array.from(allMonths).sort();
-        if (monthsList.length === 0) monthsList = [currentMonth];
+        if (allMonths.size > 0) {
+            monthsList = Array.from(allMonths).sort();
+        }
+        // Ensure current month exists
+        if (!monthsList.includes(currentMonth) && monthsList.length > 0) {
+            currentMonth = monthsList[0];
+        }
     }
 
     // ==================== PASSWORD CHECK ====================
@@ -582,36 +620,16 @@
 
         // Members List
         let membersHtml = '';
-        currentMonthMembers.forEach(m => {
-            let dateStr = m.date.split('-').reverse().join('-');
-            let expiryStr = m.expiry ? m.expiry.split('-').reverse().join('-') : 'कोई एक्सपायरी नहीं';
-            let expiryClass = '';
-            if (m.expiry) {
-                let today = new Date();
-                let exp = new Date(m.expiry);
-                let diffDays = Math.ceil((exp - today) / (1000*60*60*24));
-                if (diffDays <= 7 && diffDays >= 0) expiryClass = 'badge-due';
-                else if (diffDays < 0) expiryClass = 'badge-due'; // expired
-                else expiryClass = 'badge-paid';
-            }
-            membersHtml += `
-            <div class="member-card">
-                <div class="member-name">${m.name}</div>
-                <div class="member-row"><span>💰 राशी</span> <strong>₹${m.amount}</strong></div>
-                <div class="member-row"><span>📌 स्थिति</span> 
-                    <strong class="${m.status === 'पेड' ? 'badge-paid' : 'badge-due'}">${m.status}</strong>
-                </div>
-                <div class="member-date">📅 तारीख: ${dateStr}</div>
-                <div class="member-expiry ${expiryClass}">⏳ एक्सपायरी: ${expiryStr}</div>
-                <div class="member-phone">📞 ${m.phone}</div>
-                ${isAdmin ? `
-                    <button class="delete-btn" onclick="deleteMember('${m.name}')">🗑️ सदस्य हटाएँ</button>
-                ` : ''}
-                <button class="reminder-btn" onclick="sendReminder('${m.name}', '${m.phone}', ${m.amount}, '${m.status}')">💬 बकाया याद दिलाएँ</button>
-            </div>`;
-        });
-        document.getElementById('membersList').innerHTML = membersHtml || '<p style="text-align:center;">इस महीने कोई सदस्य नहीं</p>';
-    }
-
-    // ==================== CHART ====================
-    functio
+        if (currentMonthMembers.length === 0) {
+            membersHtml = '<p style="text-align:center; grid-column:1/-1;">इस महीने कोई सदस्य नहीं</p>';
+        } else {
+            currentMonthMembers.forEach(m => {
+                let dateStr = m.date.split('-').reverse().join('-');
+                let expiryStr = m.expiry ? m.expiry.split('-').reverse().join('-') : 'कोई एक्सपायरी नहीं';
+                
+                // Calculate expiry status
+                let expiryClass = '';
+                if (m.expiry) {
+                    let today = new Date();
+                    let exp = new Date(m.expiry);
+               
