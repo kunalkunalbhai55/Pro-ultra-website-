@@ -57,22 +57,6 @@
             font-size: 28px;
             color: #ffd966;
         }
-        /* Time Saved Counter */
-        .time-saved {
-            background: linear-gradient(145deg, #2a3f5f, #1a2a44);
-            border: 2px solid gold;
-            border-radius: 60px;
-            padding: 20px;
-            text-align: center;
-            margin: 20px 0;
-            font-size: 24px;
-            box-shadow: 0 0 30px gold;
-        }
-        .time-number {
-            font-size: 48px;
-            font-weight: 900;
-            color: gold;
-        }
         /* WhatsApp Button */
         .whatsapp {
             background: #25D366;
@@ -217,12 +201,7 @@
         <div class="owner-name" id="ownerNameDisplay">राजेश कुमार (मालिक)</div>
     </div>
 
-    <!-- Time Saved Counter -->
-    <div class="time-saved">
-        <span class="time-number" id="hoursSaved">127</span> घंटे बचाए आपने आज तक!
-    </div>
-
-    <!-- WhatsApp Button -->
+    <!-- WhatsApp Button (सबको दिखेगा) -->
     <div class="whatsapp">
         <a href="https://wa.me/919559401761" target="_blank">
             💬 व्हाट्सएप - 9559401761
@@ -238,7 +217,7 @@
         <p style="color: #aaccff; margin-top: 15px;">(एडमिन पासवर्ड: gym@123)</p>
     </div>
 
-    <!-- Owner Setup Box (सिर्फ मालिक बनने के लिए, अलग पासवर्ड) -->
+    <!-- Owner Setup Box (सिर्फ मालिक बनने के लिए) -->
     <div class="password-box" id="ownerSetupBox" style="border-color: #25D366;">
         <h2 style="color: #25D366;">👑 इस डिवाइस को मालिक बनाएं</h2>
         <p>अगर आप इस जिम के असली मालिक हैं, तो नीचे पासवर्ड डालें।</p>
@@ -248,7 +227,7 @@
         <p style="color: #aaccff; margin-top: 15px;">(मालिक पासवर्ड: owner@789 - सिर्फ आपको पता होगा)</p>
     </div>
 
-    <!-- Admin Panel (सिर्फ तब दिखेगा जब सही पासवर्ड डाला जाए) -->
+    <!-- Admin Panel (सिर्फ पासवर्ड डालने पर खुलेगा) -->
     <div class="admin-panel" id="adminPanel">
         <h2 style="color: gold;">⚙️ एडमिन पैनल</h2>
         
@@ -295,7 +274,7 @@
     <h2 style="margin-top: 40px;">📋 सदस्य सूची</h2>
     <div class="members-grid" id="membersList"></div>
 
-    <div class="footer">✨ ULTRA PRO MAX · हर बार पासवर्ड जरूरी</div>
+    <div class="footer">✨ ULTRA PRO MAX · सिर्फ मालिक हटा सकता है</div>
 </div>
 
 <script>
@@ -309,9 +288,7 @@
             { id: 2, name: "अमित", phone: "9876543211", amount: 2500, status: "बकाया", date: "2026-01-10" },
             { id: 3, name: "विकास", phone: "9876543212", amount: 3000, status: "पेड", date: "2026-02-05" },
             { id: 4, name: "राहुल", phone: "9876543213", amount: 1500, status: "बकाया", date: "2026-02-01" }
-        ],
-        // टाइम सेव काउंटर - हर बार जब कोई मेंबर एडिट होगा, बढ़ेगा
-        timeSaved: 127
+        ]
     };
 
     // डिवाइस आईडी और मालिक की पहचान
@@ -321,7 +298,6 @@
         localStorage.setItem('deviceId', DEVICE_ID);
     }
 
-    // क्या यह डिवाइस मालिक है? (अब यह सिर्फ तब सेट होगा जब सही पासवर्ड डाला जाए)
     let OWNER_KEY = 'gym_owner_' + 'गोल्ड जिम';
     let isOwner = localStorage.getItem(OWNER_KEY) === DEVICE_ID;
 
@@ -344,7 +320,6 @@
         if (pwd === 'gym@123') {
             document.getElementById('passwordBox').style.display = 'none';
             document.getElementById('adminPanel').style.display = 'block';
-            // एडमिन पैनल खुल गया, लेकिन इसका मतलब यह नहीं कि डिवाइस मालिक बन गया
         } else {
             alert('❌ गलत एडमिन पासवर्ड');
         }
@@ -358,6 +333,7 @@
             isOwner = true;
             document.getElementById('ownerSetupBox').style.display = 'none';
             alert('✅ यह डिवाइस अब मालिक बन गया है! अब आप एडमिन पासवर्ड डालकर पैनल खोल सकते हैं।');
+            renderAll(); // रेंडर करो ताकि डिलीट बटन दिखने लगे
         } else {
             alert('❌ गलत मालिक पासवर्ड');
         }
@@ -368,9 +344,6 @@
         // Gym Info Display
         document.getElementById('gymNameDisplay').innerText = '💪 ' + gymData.gymName;
         document.getElementById('ownerNameDisplay').innerText = gymData.ownerName + ' (मालिक)';
-
-        // Time Saved Counter
-        document.getElementById('hoursSaved').innerText = gymData.timeSaved;
 
         // Stats
         let totalMembers = gymData.members.length;
@@ -399,9 +372,11 @@
                         <strong class="${m.status === 'पेड' ? 'paid' : 'due'}">${m.status}</strong>
                     </div>
                     <div class="member-detail"><span>📅 तारीख</span> <strong>${dateStr}</strong></div>
+                    <!-- डिलीट बटन सिर्फ मालिक को दिखेगा -->
                     ${isOwner ? `
                         <button class="btn btn-red" style="width:100%; margin-top:15px;" onclick="deleteMember(${m.id})">🗑️ हटाएँ</button>
                     ` : ''}
+                    <!-- व्हाट्सएप रिमाइंडर सबको दिखेगा -->
                     <button class="btn btn-green" style="width:100%; margin-top:10px;" onclick="sendReminder('${m.name}', '${m.phone}', ${m.amount}, '${m.status}')">💬 बकाया याद दिलाएँ</button>
                 </div>
             `;
@@ -418,15 +393,11 @@
 
     // ==================== एडमिन फंक्शन्स ====================
     window.updateGymInfo = function() {
-        // नोट: यह फंक्शन अब बिना isOwner चेक के चलेगा, क्योंकि एडमिन पैनल पासवर्ड से खुला है
         let newGymName = document.getElementById('gymNameInput').value.trim();
         let newOwnerName = document.getElementById('ownerNameInput').value.trim();
         
         if (newGymName) gymData.gymName = newGymName;
         if (newOwnerName) gymData.ownerName = newOwnerName;
-        
-        // टाइम सेव बढ़ाओ
-        gymData.timeSaved += 1;
         
         saveData();
         renderAll();
@@ -455,9 +426,6 @@
             date: date
         });
 
-        // टाइम सेव बढ़ाओ
-        gymData.timeSaved += 2;
-
         saveData();
         renderAll();
 
@@ -472,8 +440,6 @@
         if (!isOwner) return; // डिलीट सिर्फ मालिक कर सकता है
         if (confirm('क्या सच में हटा दें?')) {
             gymData.members = gymData.members.filter(m => m.id !== id);
-            // टाइम सेव बढ़ाओ
-            gymData.timeSaved += 1;
             saveData();
             renderAll();
         }
