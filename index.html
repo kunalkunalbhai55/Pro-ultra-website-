@@ -12,7 +12,7 @@
         .gym-name { font-size: 56px; text-align: center; background: linear-gradient(135deg, #fff, cyan); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .owner-name { font-size: 28px; color: #ffd966; text-align: center; margin-bottom: 20px; }
 
-        /* WhatsApp Button - यह सबको दिखेगा */
+        /* WhatsApp Button */
         .whatsapp-main {
             background: #25D366;
             padding: 20px;
@@ -150,23 +150,23 @@
     <div class="gym-name" id="gymNameDisplay">💪 गोल्ड जिम</div>
     <div class="owner-name" id="ownerNameDisplay">राजेश कुमार (मालिक)</div>
 
-    <!-- Main WhatsApp Button - यह सबको दिखेगा -->
+    <!-- Main WhatsApp Button -->
     <div class="whatsapp-main">
         <a href="https://wa.me/919559401761" target="_blank" id="whatsappLink">
             💬 व्हाट्सएप पर बात करें - 9559401761
         </a>
     </div>
 
-    <!-- Password Box -->
+    <!-- Password Box - अब पासवर्ड नहीं दिखेगा -->
     <div class="password-box" id="passwordBox">
         <h2 style="color: gold;">🔐 एडमिन पैनल खोलें</h2>
-        <input type="password" class="password-input" id="passwordInput" placeholder="pasword dale">
+        <input type="password" class="password-input" id="passwordInput" placeholder="पासवर्ड डालें">
         <br>
-        <button class="btn" onclick="toggleAdminPanel()">✅ खोलें/बंद करें</button>
-        <p style="color: #aaccff; margin-top: 15px;">पासवर्ड: gym9080</p>
+        <button class="btn" onclick="toggleAdminPanel()">✅ खोलें</button>
+        <!-- यहाँ से "पासवर्ड: gym9080" वाली लाइन हटा दी गई है -->
     </div>
 
-    <!-- Admin Panel - पासवर्ड के बाद दिखेगा/छुपेगा -->
+    <!-- Admin Panel -->
     <div class="admin-panel" id="adminPanel">
         <div class="admin-title">⚙️ एडमिन पैनल</div>
         
@@ -220,7 +220,7 @@
     <h2 style="margin: 40px 0 20px;">📋 सदस्य सूची</h2>
     <div class="members-grid" id="membersList"></div>
 
-    <div class="footer">✨ फाइनल प्रो · बटन सिर्फ पैनल खुले पर</div>
+    <div class="footer">✨ फाइनल प्रो · सिक्योर</div>
 </div>
 
 <script>
@@ -237,7 +237,7 @@
         ]
     };
 
-    let isAdminPanelOpen = false; // यह बताएगा कि पैनल खुला है या नहीं
+    let isAdminPanelOpen = false;
 
     // Load from localStorage
     function loadData() {
@@ -277,7 +277,7 @@
         document.getElementById('totalPaid').innerText = '₹' + totalPaid;
         document.getElementById('totalDue').innerText = '₹' + totalDue;
 
-        // Members List - अब बटन पैनल के खुले/बंद होने पर depend करेंगे
+        // Members List
         let membersHtml = '';
         gymData.members.forEach(m => {
             let dateStr = m.date.split('-').reverse().join('-');
@@ -292,11 +292,9 @@
                     <div class="row"><span>📅 तारीख</span> <strong>${dateStr}</strong></div>
             `;
             
-            // 🔴 अहम लॉजिक: सिर्फ तब बटन दिखे जब एडमिन पैनल खुला हो
+            // सिर्फ तब बटन दिखे जब एडमिन पैनल खुला हो
             if (isAdminPanelOpen) {
-                // डिलीट बटन - सिर्फ पैनल खुले पर
                 membersHtml += `<button class="btn btn-red" style="width:100%; margin-top:15px;" onclick="deleteMember(${m.id})">🗑️ हटाएँ</button>`;
-                // व्हाट्सएप बटन - पैनल खुले पर भी रहेगा (एडमिन के लिए भी जरूरी)
                 membersHtml += `<button class="btn btn-green" style="width:100%; margin-top:10px;" onclick="sendReminder('${m.name}', '${m.phone}', ${m.amount}, '${m.status}')">💬 बकाया याद दिलाएँ</button>`;
             }
             
@@ -308,8 +306,8 @@
     // ==================== पैनल टॉगल ====================
     window.toggleAdminPanel = function() {
         let pwd = document.getElementById('passwordInput').value;
-        if (pwd === 'gym@123') {
-            // पैनल की स्थिति बदलो
+        // पासवर्ड अब भी gym9080 ही रहेगा, बस दिखेगा नहीं
+        if (pwd === 'gym9080') {
             isAdminPanelOpen = !isAdminPanelOpen;
             
             if (isAdminPanelOpen) {
@@ -320,10 +318,7 @@
                 document.getElementById('passwordBox').style.display = 'block';
             }
             
-            // पासवर्ड फील्ड खाली करो
             document.getElementById('passwordInput').value = '';
-            
-            // रेंडर करो ताकि बटन दिखें/छुपें
             renderAll();
             
         } else {
@@ -411,4 +406,4 @@
     renderAll();
 </script>
 </body>
-            </html>
+    </html>
