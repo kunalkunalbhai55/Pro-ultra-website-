@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>💪 गोल्ड जिम · फाइनल</title>
+    <title>💪 गोल्ड जिम · फाइनल फिक्स</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
         body { background: #0a0f1e; color: white; padding: 20px; }
@@ -14,13 +14,13 @@
         .whatsapp a { color: white; text-decoration: none; font-size: 28px; font-weight: bold; }
         .msg { background: #2a3a60; color: #ffaa66; padding: 15px; border-radius: 40px; text-align: center; margin: 20px 0; }
         .box { background: #1a2a44; border: 3px solid gold; border-radius: 60px; padding: 30px; text-align: center; margin: 20px 0; }
-        input { background: #0b1a32; border: 2px solid cyan; border-radius: 60px; padding: 15px; width: 300px; max-width: 100%; margin: 10px 0; color: white; font-size: 18px; }
+        input, select { background: #0b1a32; border: 2px solid cyan; border-radius: 60px; padding: 15px; width: 300px; max-width: 100%; margin: 10px 0; color: white; font-size: 18px; }
         .btn { background: gold; color: black; border: none; border-radius: 60px; padding: 15px 40px; font-size: 20px; cursor: pointer; margin: 5px; }
         .btn-green { background: #25D366; color: white; }
         .btn-red { background: #bc3f3f; color: white; }
         .admin-panel { background: #1f2a44; border: 4px solid gold; border-radius: 60px; padding: 30px; margin: 25px 0; display: none; }
         .form-group { display: flex; flex-wrap: wrap; gap: 15px; margin: 20px 0; }
-        .form-group input, .form-group select { flex: 1 1 200px; background: #0b1a32; border: 2px solid cyan; border-radius: 50px; padding: 15px; color: white; }
+        .form-group input, .form-group select { flex: 1 1 200px; width: auto; }
         .stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; margin: 25px 0; }
         .stat-box { background: #1f3a5f; border-left: 6px solid cyan; border-radius: 30px; padding: 25px; text-align: center; }
         .stat-number { font-size: 42px; font-weight: bold; color: cyan; }
@@ -44,15 +44,15 @@
 
     <div class="msg" id="viewerMsg">🔍 आप देख सकते हैं, डिलीट नहीं कर सकते।</div>
 
-    <!-- एडमिन पैनल खोलने के लिए -->
-    <div class="box">
+    <!-- एडमिन पैनल खोलें -->
+    <div class="box" id="adminBox">
         <h2 style="color: gold;">🔐 एडमिन पैनल खोलें</h2>
         <input type="password" id="adminPass" placeholder="पासवर्ड">
         <button class="btn" onclick="openAdmin()">✅ खोलें</button>
         <p style="color:#aaccff;">पासवर्ड: gym@123</p>
     </div>
 
-    <!-- मालिक बनने के लिए -->
+    <!-- मालिक बनें -->
     <div class="box" id="ownerBox">
         <h2 style="color: #25D366;">👑 इस डिवाइस को मालिक बनाएं</h2>
         <input type="password" id="ownerPass" placeholder="मालिक पासवर्ड">
@@ -60,7 +60,7 @@
         <p style="color:#aaccff;">पासवर्ड: owner@789</p>
     </div>
 
-    <!-- एडमिन पैनल (छुपा हुआ) -->
+    <!-- एडमिन पैनल -->
     <div class="admin-panel" id="adminPanel">
         <h2 style="color: gold;">⚙️ एडमिन पैनल</h2>
         <h3 style="color:cyan;">🏢 जिम जानकारी</h3>
@@ -93,7 +93,7 @@
     <!-- सदस्य सूची -->
     <h2 style="margin: 40px 0 20px;">📋 सदस्य सूची</h2>
     <div class="members-grid" id="membersList"></div>
-    <div class="footer">✨ अंतिम संस्करण</div>
+    <div class="footer">✨ अंतिम फिक्स</div>
 </div>
 
 <script>
@@ -180,6 +180,7 @@
     // ========== एडमिन पैनल खोलें ==========
     window.openAdmin = function() {
         if (document.getElementById('adminPass').value === 'gym@123') {
+            document.getElementById('adminBox').style.display = 'none';
             document.getElementById('adminPanel').style.display = 'block';
         } else {
             alert('❌ गलत पासवर्ड');
@@ -254,7 +255,7 @@
             alert('कोई बकाया नहीं');
             return;
         }
-        let msg = encodeURIComponent(`नमस्ते ${name} जी, ₹${amount} बकाया है।`);
+        let msg = encodeURIComponent(`नमस्ते ${name} जी, ₹${amount} बकाया है। कृपया जल्दी जमा करें।`);
         window.open(`https://wa.me/91${phone}?text=${msg}`, '_blank');
     };
 
