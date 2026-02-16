@@ -21,27 +21,6 @@
             max-width: 1200px;
             margin: 0 auto;
         }
-        /* Card Style */
-        .card {
-            background: rgba(20, 35, 60, 0.8);
-            backdrop-filter: blur(10px);
-            border: 2px solid cyan;
-            border-radius: 50px;
-            padding: 30px;
-            margin: 25px 0;
-        }
-        h1 {
-            font-size: 48px;
-            text-align: center;
-            background: linear-gradient(135deg, #fff, cyan);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        h2 {
-            color: cyan;
-            margin-bottom: 20px;
-        }
-        /* Gym Info Display */
         .gym-info {
             text-align: center;
             margin-bottom: 20px;
@@ -57,7 +36,6 @@
             font-size: 28px;
             color: #ffd966;
         }
-        /* WhatsApp Button */
         .whatsapp {
             background: #25D366;
             padding: 20px;
@@ -71,7 +49,6 @@
             font-size: 28px;
             font-weight: bold;
         }
-        /* Password Box */
         .password-box {
             background: #1a2a44;
             border: 3px solid gold;
@@ -110,11 +87,6 @@
             background: #bc3f3f;
             color: white;
         }
-        .btn-blue {
-            background: #0066cc;
-            color: white;
-        }
-        /* Admin Panel */
         .admin-panel {
             background: #1f2a44;
             border: 4px solid gold;
@@ -138,7 +110,6 @@
             color: white;
             font-size: 16px;
         }
-        /* Stats */
         .stats {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -157,7 +128,6 @@
             font-weight: bold;
             color: cyan;
         }
-        /* Members Grid */
         .members-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -185,11 +155,6 @@
         }
         .paid { color: #a0ffb0; }
         .due { color: #ffaa66; }
-        .footer {
-            text-align: center;
-            color: #7f9fd0;
-            padding: 30px;
-        }
         .viewer-message {
             background: #2a3a60;
             color: #ffaa66;
@@ -198,6 +163,11 @@
             text-align: center;
             margin: 20px 0;
             font-size: 18px;
+        }
+        .footer {
+            text-align: center;
+            color: #7f9fd0;
+            padding: 30px;
         }
     </style>
 </head>
@@ -210,17 +180,15 @@
         <div class="owner-name" id="ownerNameDisplay">राजेश कुमार (मालिक)</div>
     </div>
 
-    <!-- WhatsApp Button (सबको दिखेगा) -->
+    <!-- WhatsApp Button -->
     <div class="whatsapp">
         <a href="https://wa.me/919559401761" target="_blank">
             💬 व्हाट्सएप - 9559401761
         </a>
     </div>
 
-    <!-- Viewer Mode Message (सिर्फ उनके लिए जो मालिक नहीं हैं) -->
-    <div class="viewer-message" id="viewerMessage" style="display: none;">
-        🔍 आप देख सकते हैं, एडिट या डिलीट नहीं कर सकते। केवल मालिक ही बदलाव कर सकता है।
-    </div>
+    <!-- Viewer Mode Message (यह सिर्फ उन्हें दिखेगा जो मालिक नहीं हैं) -->
+    <div class="viewer-message" id="viewerMessage"></div>
 
     <!-- Password Box (हर बार पासवर्ड माँगेगा) -->
     <div class="password-box" id="passwordBox">
@@ -346,13 +314,24 @@
             localStorage.setItem(OWNER_KEY, DEVICE_ID);
             isOwner = true;
             document.getElementById('ownerSetupBox').style.display = 'none';
-            document.getElementById('viewerMessage').style.display = 'none';
+            updateViewerMessage();
+            renderAll();
             alert('✅ यह डिवाइस अब मालिक बन गया है! अब आप एडमिन पासवर्ड डालकर पैनल खोल सकते हैं।');
-            renderAll(); // रेंडर करो ताकि डिलीट बटन दिखने लगे
         } else {
             alert('❌ गलत मालिक पासवर्ड');
         }
     };
+
+    // ==================== व्यूअर मैसेज अपडेट ====================
+    function updateViewerMessage() {
+        let viewerMsg = document.getElementById('viewerMessage');
+        if (isOwner) {
+            viewerMsg.style.display = 'none';
+        } else {
+            viewerMsg.style.display = 'block';
+            viewerMsg.innerText = '🔍 आप देख सकते हैं, एडिट या डिलीट नहीं कर सकते। केवल मालिक ही बदलाव कर सकता है।';
+        }
+    }
 
     // ==================== रेंडर ====================
     function renderAll() {
@@ -379,8 +358,8 @@
         gymData.members.forEach(m => {
             let dateStr = m.date.split('-').reverse().join('-');
             
-            // मेम्बर कार्ड बनाओ
-            let cardHtml = `
+            // मेम्बर कार्ड शुरू
+            membersHtml += `
                 <div class="member-card">
                     <div class="member-name">${m.name}</div>
                     <div class="member-detail"><span>📞 फोन</span> <strong>${m.phone}</strong></div>
@@ -391,27 +370,25 @@
                     <div class="member-detail"><span>📅 तारीख</span> <strong>${dateStr}</strong></div>
             `;
             
-            // डिलीट बटन सिर्फ तब जोड़ो जब isOwner सही (true) हो
+            // डिलीट बटन - सिर्फ तब जोड़ो जब isOwner सही (true) हो
             if (isOwner) {
-                cardHtml += `<button class="btn btn-red" style="width:100%; margin-top:15px;" onclick="deleteMember(${m.id})">🗑️ हटाएँ</button>`;
+                membersHtml += `<button class="btn btn-red" style="width:100%; margin-top:15px;" onclick="deleteMember(${m.id})">🗑️ हटाएँ</button>`;
             }
             
-            // व्हाट्सएप रिमाइंडर सबके लिए
-            cardHtml += `<button class="btn btn-green" style="width:100%; margin-top:10px;" onclick="sendReminder('${m.name}', '${m.phone}', ${m.amount}, '${m.status}')">💬 बकाया याद दिलाएँ</button>`;
+            // व्हाट्सएप रिमाइंडर - सबके लिए
+            membersHtml += `<button class="btn btn-green" style="width:100%; margin-top:10px;" onclick="sendReminder('${m.name}', '${m.phone}', ${m.amount}, '${m.status}')">💬 बकाया याद दिलाएँ</button>`;
             
-            cardHtml += `</div>`;
-            membersHtml += cardHtml;
+            membersHtml += `</div>`;
         });
         document.getElementById('membersList').innerHTML = membersHtml;
 
-        // Owner Setup Box और Viewer Message दिखाना/छुपाना
+        // Owner Setup Box और Viewer Message
         if (isOwner) {
             document.getElementById('ownerSetupBox').style.display = 'none';
-            document.getElementById('viewerMessage').style.display = 'none';
         } else {
             document.getElementById('ownerSetupBox').style.display = 'block';
-            document.getElementById('viewerMessage').style.display = 'block';
         }
+        updateViewerMessage();
     }
 
     // ==================== एडमिन फंक्शन्स ====================
@@ -482,7 +459,8 @@
     };
 
     // ==================== START ====================
+    updateViewerMessage();
     renderAll();
 </script>
 </body>
-    </html>
+                </html>
