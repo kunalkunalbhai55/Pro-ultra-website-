@@ -3,378 +3,171 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> 💪 गोल्ड जिम · PRO ULTRA </title>
+    <title>💪 गोल्ड जिम PRO ULTRA</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', system-ui, sans-serif;
+            font-family: 'Segoe UI', Arial, sans-serif;
         }
-
         body {
-            background: radial-gradient(circle at 30% 10%, #1e2b4a, #0a0f1e);
-            min-height: 100vh;
-            padding: 20px;
+            background: radial-gradient(circle at 10% 20%, #0f172a, #030614);
             color: white;
+            padding: 20px;
+            min-height: 100vh;
         }
-
         .container {
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
         }
-
-        /* Mirror Glass Effect */
-        .mirror-card {
-            background: rgba(18, 30, 50, 0.4);
-            backdrop-filter: blur(15px) saturate(180%);
-            border: 1px solid rgba(0, 255, 255, 0.3);
-            border-radius: 60px;
-            padding: 30px 25px;
-            box-shadow: 0 30px 50px -20px black;
+        /* Card Style */
+        .card {
+            background: rgba(20, 35, 60, 0.8);
+            backdrop-filter: blur(10px);
+            border: 2px solid cyan;
+            border-radius: 50px;
+            padding: 30px;
+            margin: 25px 0;
         }
-
-        /* Header */
-        .gym-header {
+        h1 {
+            font-size: 48px;
             text-align: center;
-            margin-bottom: 25px;
-        }
-
-        .gym-name {
-            font-size: 56px;
-            font-weight: 900;
-            background: linear-gradient(145deg, #ffffff, #a0f0ff, #70c8ff);
+            background: linear-gradient(135deg, #fff, cyan);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 20px cyan;
         }
-
-        .gym-owner {
-            font-size: 28px;
-            color: #ffd966;
-            margin-top: 8px;
-        }
-
-        /* Notice Board */
-        .notice-board {
-            background: rgba(255, 215, 0, 0.15);
-            border: 2px solid gold;
-            border-radius: 60px;
-            padding: 20px;
-            margin: 25px 0;
-            text-align: center;
-            font-size: 24px;
-            font-weight: 600;
-            color: #ffd966;
-            box-shadow: 0 0 30px gold;
-        }
-
-        .notice-edit {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            margin-top: 10px;
-            flex-wrap: wrap;
-        }
-
-        .notice-input {
-            background: rgba(10, 25, 45, 0.8);
-            border: 2px solid cyan;
-            border-radius: 60px;
-            padding: 12px 20px;
-            color: white;
-            font-size: 18px;
-            width: 300px;
-            max-width: 100%;
-        }
-
-        /* WhatsApp Block */
-        .whatsapp-mirror {
-            background: rgba(37, 211, 102, 0.25);
-            backdrop-filter: blur(10px);
-            border: 2px solid #25D366;
-            border-radius: 100px;
-            padding: 20px;
-            margin: 25px 0;
-            text-align: center;
-        }
-
-        .whatsapp-mirror a {
-            color: white;
-            text-decoration: none;
-            font-size: 32px;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-
-        .whatsapp-mirror span {
-            background: #25D366;
-            padding: 8px 30px;
-            border-radius: 60px;
-        }
-
-        /* Month Tabs */
-        .month-tabs {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            justify-content: center;
-            margin: 30px 0 20px;
-        }
-
-        .month-btn {
-            background: rgba(30, 50, 80, 0.6);
-            backdrop-filter: blur(5px);
-            border: 1px solid cyan;
-            padding: 14px 28px;
-            border-radius: 50px;
-            font-size: 18px;
-            cursor: pointer;
-            color: #b5d0ff;
-            transition: 0.2s;
-        }
-
-        .month-btn.active {
-            background: cyan;
-            color: black;
-            box-shadow: 0 0 25px cyan;
-        }
-
-        /* Stats Grid */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 20px;
-            margin: 25px 0;
-        }
-
-        .stat-card {
-            background: rgba(20, 40, 65, 0.5);
-            backdrop-filter: blur(10px);
-            border-left: 6px solid cyan;
-            border-radius: 40px;
-            padding: 25px 15px;
-            text-align: center;
-        }
-
-        .stat-number {
-            font-size: 46px;
-            font-weight: 800;
+        h2 {
             color: cyan;
-        }
-
-        /* Chart */
-        .chart-container {
-            background: rgba(20, 40, 65, 0.5);
-            backdrop-filter: blur(10px);
-            border-radius: 40px;
-            padding: 25px;
-            margin: 25px 0;
-        }
-
-        .chart-bars {
-            display: flex;
-            align-items: flex-end;
-            gap: 15px;
-            justify-content: center;
-            min-height: 200px;
-            margin-top: 20px;
-            flex-wrap: wrap;
-        }
-
-        .bar-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 60px;
-        }
-
-        .bar {
-            width: 40px;
-            background: cyan;
-            border-radius: 20px 20px 0 0;
-            transition: 0.3s;
-            text-align: center;
-            font-size: 12px;
-            color: black;
-            font-weight: bold;
-            display: flex;
-            align-items: flex-end;
-            justify-content: center;
-            padding-top: 5px;
-        }
-
-        .bar-label {
-            margin-top: 10px;
-            font-size: 14px;
-            color: white;
-            text-align: center;
-        }
-
-        /* Members Grid */
-        .members-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-            margin-top: 20px;
-        }
-
-        .member-card {
-            background: rgba(20, 35, 60, 0.6);
-            backdrop-filter: blur(12px);
-            border: 1px solid #4f8cff;
-            border-radius: 40px;
-            padding: 25px;
-            position: relative;
-        }
-
-        .member-name {
-            font-size: 30px;
-            font-weight: 700;
-            color: #aaffff;
-            margin-bottom: 12px;
-        }
-
-        .member-row {
-            display: flex;
-            justify-content: space-between;
-            font-size: 20px;
-            padding: 10px 0;
-            border-bottom: 1px dashed #3f70b0;
-        }
-
-        .badge-paid { color: #a0ffb0; font-weight: 700; }
-        .badge-due { color: #ffaa66; font-weight: 700; }
-        .badge-expiry-soon { color: #ffaa66; font-weight: 700; }
-        .badge-expired { color: #ff6666; font-weight: 700; }
-
-        .member-date, .member-expiry {
-            background: rgba(0, 150, 255, 0.2);
-            backdrop-filter: blur(5px);
-            display: inline-block;
-            padding: 8px 25px;
-            border-radius: 40px;
-            margin-top: 10px;
-            color: #b0e0ff;
-            margin-right: 5px;
-        }
-
-        .member-phone {
-            margin-top: 10px;
-            font-size: 18px;
-            color: #25D366;
-        }
-
-        .reminder-btn {
-            background: #25D366;
-            color: white;
-            border: none;
-            border-radius: 50px;
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            margin-top: 15px;
-            width: 100%;
-        }
-
-        /* Admin Panel */
-        .admin-panel {
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(20px);
-            border: 3px solid gold;
-            border-radius: 60px;
-            padding: 35px;
-            margin: 30px 0;
-        }
-
-        .admin-title {
-            color: gold;
-            font-size: 40px;
-            margin-bottom: 25px;
-        }
-
-        .admin-form {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
             margin-bottom: 20px;
         }
-
-        .admin-input {
-            background: rgba(10, 25, 45, 0.8);
-            border: 2px solid cyan;
-            border-radius: 50px;
-            padding: 16px 20px;
-            color: white;
-            font-size: 18px;
+        /* WhatsApp Button */
+        .whatsapp {
+            background: #25D366;
+            padding: 20px;
+            border-radius: 100px;
+            text-align: center;
+            margin: 20px 0;
         }
-
-        .admin-btn {
-            background: gold;
-            color: black;
-            border: none;
-            border-radius: 50px;
-            padding: 16px 25px;
-            font-size: 20px;
+        .whatsapp a {
+            color: white;
+            text-decoration: none;
+            font-size: 28px;
             font-weight: bold;
-            cursor: pointer;
         }
-
-        .delete-btn {
-            background: #bc3f3f;
-            color: white;
-            border: none;
-            border-radius: 50px;
-            padding: 12px;
-            width: 100%;
-            margin-top: 15px;
-            cursor: pointer;
-        }
-
+        /* Password Box */
         .password-box {
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(10px);
-            border: 2px solid gold;
+            background: #1a2a44;
+            border: 3px solid gold;
             border-radius: 60px;
             padding: 30px;
             text-align: center;
-            margin: 30px 0;
         }
-
         .password-input {
             background: #0b1a32;
             border: 2px solid cyan;
             border-radius: 60px;
-            padding: 16px 25px;
+            padding: 15px 25px;
             color: white;
+            font-size: 18px;
+            width: 300px;
+            max-width: 100%;
+            margin: 15px 0;
+        }
+        .btn {
+            background: gold;
+            color: black;
+            border: none;
+            border-radius: 60px;
+            padding: 15px 40px;
             font-size: 20px;
-            width: 100%;
-            max-width: 350px;
-            margin: 15px auto;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 10px;
         }
-
-        .backup-buttons {
+        .btn-green {
+            background: #25D366;
+            color: white;
+        }
+        .btn-red {
+            background: #bc3f3f;
+            color: white;
+        }
+        /* Admin Panel */
+        .admin-panel {
+            background: #1f2a44;
+            border: 4px solid gold;
+            border-radius: 60px;
+            padding: 30px;
+            margin: 25px 0;
+            display: none;
+        }
+        .form-group {
             display: flex;
-            gap: 15px;
-            justify-content: center;
             flex-wrap: wrap;
-            margin-top: 25px;
+            gap: 15px;
+            margin: 20px 0;
         }
-
+        .form-group input, .form-group select {
+            flex: 1 1 200px;
+            background: #0b1a32;
+            border: 2px solid cyan;
+            border-radius: 50px;
+            padding: 15px;
+            color: white;
+            font-size: 16px;
+        }
+        /* Stats */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin: 25px 0;
+        }
+        .stat-box {
+            background: #1f3a5f;
+            border-left: 6px solid cyan;
+            border-radius: 30px;
+            padding: 25px;
+            text-align: center;
+        }
+        .stat-number {
+            font-size: 42px;
+            font-weight: bold;
+            color: cyan;
+        }
+        /* Members Grid */
+        .members-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .member-card {
+            background: #10213b;
+            border-radius: 40px;
+            padding: 25px;
+            border: 1px solid #4f8cff;
+        }
+        .member-name {
+            font-size: 28px;
+            font-weight: bold;
+            color: cyan;
+            margin-bottom: 15px;
+        }
+        .member-detail {
+            display: flex;
+            justify-content: space-between;
+            font-size: 18px;
+            padding: 8px 0;
+            border-bottom: 1px dashed #3f70b0;
+        }
+        .paid { color: #a0ffb0; }
+        .due { color: #ffaa66; }
         .footer {
             text-align: center;
             color: #7f9fd0;
             padding: 30px;
-        }
-
-        @media print {
-            .admin-panel, .password-box, .whatsapp-mirror, .month-tabs, .notice-edit, .backup-buttons, .owner-toggle {
-                display: none !important;
-            }
         }
     </style>
 </head>
@@ -382,166 +175,93 @@
 <div class="container">
 
     <!-- Header -->
-    <div class="gym-header mirror-card">
-        <div class="gym-name" id="gymNameDisplay">💪 गोल्ड जिम</div>
-        <div class="gym-owner" id="ownerNameDisplay">राजेश कुमार (मालिक)</div>
-    </div>
-
-    <!-- Notice Board -->
-    <div class="notice-board" id="noticeBoard">
-        <div id="noticeText">🔥 आज नई स्कीम शुरू! सालभर की मेंबरशिप पर 20% छूट 🔥</div>
-        <div class="notice-edit" id="noticeEdit" style="display: none;">
-            <input type="text" class="notice-input" id="noticeInput" placeholder="नया नोटिस लिखें">
-            <button class="admin-btn" onclick="updateNotice()">✅ अपडेट</button>
-        </div>
-    </div>
+    <h1>💪 गोल्ड जिम</h1>
+    <p style="text-align: center; font-size: 24px; color: #ffd966;">राजेश कुमार (मालिक)</p>
 
     <!-- WhatsApp Button -->
-    <div class="whatsapp-mirror">
+    <div class="whatsapp">
         <a href="https://wa.me/919559401761" target="_blank">
-            💬 <span>व्हाट्सएप</span> - 9559401761
+            💬 व्हाट्सएप - 9559401761
         </a>
     </div>
 
     <!-- Password Box -->
     <div class="password-box" id="passwordBox">
-        <h2 style="color: gold;">🔐 एडमिन पैनल के लिए पासवर्ड डालें</h2>
-        <input type="password" class="password-input" id="passwordInput" placeholder="पासवर्ड">
-        <button class="admin-btn" onclick="checkPassword()">✅ खोलें</button>
-        <p style="color: #aaccff; margin-top: 15px;">💡 सिर्फ मालिक को पता होगा</p>
+        <h2 style="color: gold;">🔐 एडमिन पैनल खोलें</h2>
+        <input type="password" class="password-input" id="passwordInput" placeholder="पासवर्ड डालें">
+        <br>
+        <button class="btn" onclick="checkPassword()">✅ खोलें</button>
+        <p style="color: #aaccff; margin-top: 15px;">(पासवर्ड: gym@123)</p>
     </div>
 
-    <!-- Admin Panel (Hidden) -->
-    <div class="admin-panel" id="adminPanel" style="display: none;">
-        <div class="admin-title">⚙️ एडमिन पैनल (PRO ULTRA)</div>
-
-        <!-- Gym Info -->
-        <h3 style="color:cyan;">🏢 जिम की जानकारी</h3>
-        <div class="admin-form">
-            <input class="admin-input" id="gymNameInput" placeholder="जिम का नाम" value="गोल्ड जिम">
-            <input class="admin-input" id="ownerNameInput" placeholder="मालिक का नाम" value="राजेश कुमार">
-            <button class="admin-btn" onclick="updateGymInfo()">✅ अपडेट</button>
-        </div>
-
-        <!-- Notice Edit Toggle -->
-        <button class="admin-btn" onclick="toggleNoticeEdit()" style="margin: 20px 0;">📢 नोटिस एडिट करें</button>
-
-        <!-- Add Member with Expiry -->
-        <h3 style="color:cyan; margin-top: 30px;">➕ नया सदस्य (एक्सपायरी के साथ)</h3>
-        <div class="admin-form">
-            <input class="admin-input" id="memberName" placeholder="नाम">
-            <input class="admin-input" type="number" id="memberPhone" placeholder="फोन नंबर">
-            <input class="admin-input" type="number" id="memberAmount" placeholder="राशी">
-            <input class="admin-input" type="date" id="memberDate" value="2026-02-16">
-            <input class="admin-input" type="date" id="memberExpiry" value="2026-03-16">
-            <select class="admin-input" id="memberStatus">
+    <!-- Admin Panel -->
+    <div class="admin-panel" id="adminPanel">
+        <h2 style="color: gold;">⚙️ एडमिन पैनल</h2>
+        
+        <h3 style="color: cyan;">➕ नया सदस्य जोड़ें</h3>
+        <div class="form-group">
+            <input type="text" id="memberName" placeholder="नाम">
+            <input type="number" id="memberPhone" placeholder="फोन नंबर">
+            <input type="number" id="memberAmount" placeholder="राशी (₹)">
+            <input type="date" id="memberDate" value="2026-02-16">
+            <select id="memberStatus">
                 <option value="पेड">✅ पेड</option>
                 <option value="बकाया">⏳ बकाया</option>
             </select>
-            <button class="admin-btn" onclick="addMember()">➕ जोड़ें</button>
-        </div>
-
-        <!-- Bulk Reminder & Backup -->
-        <div class="backup-buttons">
-            <button class="admin-btn" onclick="sendBulkReminder()">📢 सभी बकायेदारों को याद दिलाएँ</button>
-            <button class="admin-btn" onclick="exportData()">💾 बैकअप डाउनलोड</button>
-            <button class="admin-btn" onclick="importData()">📂 बैकअप अपलोड</button>
-            <button class="admin-btn" onclick="printReport()">🖨️ पीडीएफ रिपोर्ट</button>
+            <button class="btn btn-green" onclick="addMember()">➕ जोड़ें</button>
         </div>
     </div>
 
-    <!-- Month Tabs -->
-    <div class="month-tabs" id="monthTabs"></div>
-
     <!-- Stats -->
-    <div class="stats-grid" id="monthStats"></div>
-
-    <!-- Revenue Chart -->
-    <div class="chart-container">
-        <h2 style="color: cyan; text-align: center;">📊 ग्रोथ चार्ट (महीने-दर-महीने)</h2>
-        <div class="chart-bars" id="chartBars"></div>
+    <div class="stats">
+        <div class="stat-box">
+            <div class="stat-number" id="totalMembers">0</div>
+            <div>कुल सदस्य</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-number" id="totalPaid">₹0</div>
+            <div>कुल जमा</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-number" id="totalDue">₹0</div>
+            <div>कुल बकाया</div>
+        </div>
     </div>
 
     <!-- Members List -->
-    <h2 style="margin: 30px 0 20px;">📋 सदस्य सूची (एक्सपायरी के साथ)</h2>
+    <h2 style="margin-top: 40px;">📋 सदस्य सूची</h2>
     <div class="members-grid" id="membersList"></div>
 
-    <div class="footer">✨ PRO ULTRA EDITION · सभी फीचर्स के साथ</div>
+    <div class="footer">✨ PRO ULTRA · सभी फीचर्स के साथ</div>
 </div>
 
 <script>
-    // ==================== डेटा स्ट्रक्चर ====================
+    // ==================== डेटा ====================
     let gymData = {
         gymName: "गोल्ड जिम",
         ownerName: "राजेश कुमार",
         waNumber: "919559401761",
-        notice: "🔥 आज नई स्कीम शुरू! सालभर की मेंबरशिप पर 20% छूट 🔥",
-        members: {
-            "सचिन": {
-                phone: "9876543210",
-                history: [
-                    { month: "जनवरी 2026", amount: 2000, status: "पेड", date: "2026-01-15" }
-                ],
-                expiry: "2026-02-15"
-            },
-            "अमित": {
-                phone: "9876543211",
-                history: [
-                    { month: "जनवरी 2026", amount: 2500, status: "बकाया", date: "2026-01-10" }
-                ],
-                expiry: "2026-02-10"
-            },
-            "विकास": {
-                phone: "9876543212",
-                history: [
-                    { month: "फरवरी 2026", amount: 3000, status: "पेड", date: "2026-02-05" }
-                ],
-                expiry: "2026-03-05"
-            },
-            "राहुल": {
-                phone: "9876543213",
-                history: [
-                    { month: "फरवरी 2026", amount: 1500, status: "बकाया", date: "2026-02-01" }
-                ],
-                expiry: "2026-03-01"
-            }
-        }
+        members: [
+            { id: 1, name: "सचिन", phone: "9876543210", amount: 2000, status: "पेड", date: "2026-01-15" },
+            { id: 2, name: "अमित", phone: "9876543211", amount: 2500, status: "बकाया", date: "2026-01-10" },
+            { id: 3, name: "विकास", phone: "9876543212", amount: 3000, status: "पेड", date: "2026-02-05" },
+            { id: 4, name: "राहुल", phone: "9876543213", amount: 1500, status: "बकाया", date: "2026-02-01" }
+        ]
     };
 
-    let currentMonth = "जनवरी 2026";
-    let monthsList = ["जनवरी 2026", "फरवरी 2026", "मार्च 2026"];
     let isAdmin = false;
 
-    // Load & Save
+    // Load from localStorage
     function loadData() {
         let saved = localStorage.getItem('gymProUltraData');
         if (saved) {
-            try {
-                gymData = JSON.parse(saved);
-            } catch (e) {
-                console.log('Error loading data, using default');
-            }
+            gymData = JSON.parse(saved);
         }
-        updateMonthsList();
     }
     loadData();
 
-    function saveData() { 
-        localStorage.setItem('gymProUltraData', JSON.stringify(gymData)); 
-    }
-
-    function updateMonthsList() {
-        let allMonths = new Set();
-        for (let name in gymData.members) {
-            gymData.members[name].history.forEach(h => allMonths.add(h.month));
-        }
-        if (allMonths.size > 0) {
-            monthsList = Array.from(allMonths).sort();
-        }
-        // Ensure current month exists
-        if (!monthsList.includes(currentMonth) && monthsList.length > 0) {
-            currentMonth = monthsList[0];
-        }
+    function saveData() {
+        localStorage.setItem('gymProUltraData', JSON.stringify(gymData));
     }
 
     // ==================== PASSWORD CHECK ====================
@@ -552,84 +272,107 @@
             document.getElementById('adminPanel').style.display = 'block';
             isAdmin = true;
             renderAll();
-        } else alert('❌ गलत पासवर्ड');
-    };
-
-    // ==================== NOTICE ====================
-    window.toggleNoticeEdit = function() {
-        let editDiv = document.getElementById('noticeEdit');
-        editDiv.style.display = editDiv.style.display === 'none' ? 'flex' : 'none';
-        document.getElementById('noticeInput').value = gymData.notice;
-    };
-
-    window.updateNotice = function() {
-        let newNotice = document.getElementById('noticeInput').value;
-        if (newNotice) {
-            gymData.notice = newNotice;
-            document.getElementById('noticeText').innerText = newNotice;
-            document.getElementById('noticeEdit').style.display = 'none';
-            saveData();
+        } else {
+            alert('❌ गलत पासवर्ड');
         }
     };
 
     // ==================== RENDER ALL ====================
     function renderAll() {
-        // Gym Info
-        document.getElementById('gymNameDisplay').innerText = '💪 ' + gymData.gymName;
-        document.getElementById('ownerNameDisplay').innerText = gymData.ownerName + ' (मालिक)';
-        document.getElementById('noticeText').innerText = gymData.notice;
-
-        // Month Tabs
-        let tabsHtml = '';
-        monthsList.forEach(m => {
-            tabsHtml += `<div class="month-btn ${m === currentMonth ? 'active' : ''}" onclick="switchMonth('${m}')">${m}</div>`;
+        // Stats
+        let totalMembers = gymData.members.length;
+        let totalPaid = 0;
+        let totalDue = 0;
+        
+        gymData.members.forEach(m => {
+            if (m.status === 'पेड') totalPaid += m.amount;
+            else totalDue += m.amount;
         });
-        if (isAdmin) {
-            tabsHtml += `<div class="month-btn" onclick="addNewMonth()">➕ नया महीना</div>`;
-        }
-        document.getElementById('monthTabs').innerHTML = tabsHtml;
 
-        // Calculate Stats for current month
-        let totalMembers = 0, totalPaid = 0, totalDue = 0;
-        let currentMonthMembers = [];
-
-        for (let name in gymData.members) {
-            let member = gymData.members[name];
-            let found = member.history.find(h => h.month === currentMonth);
-            if (found) {
-                totalMembers++;
-                if (found.status === 'पेड') totalPaid += found.amount;
-                else totalDue += found.amount;
-                currentMonthMembers.push({
-                    name: name,
-                    phone: member.phone,
-                    expiry: member.expiry,
-                    ...found
-                });
-            }
-        }
-
-        document.getElementById('monthStats').innerHTML = `
-            <div class="stat-card"><div class="stat-number">${totalMembers}</div><div>सदस्य</div></div>
-            <div class="stat-card"><div class="stat-number">₹${totalPaid}</div><div>जमा</div></div>
-            <div class="stat-card"><div class="stat-number">₹${totalDue}</div><div>बकाया</div></div>
-        `;
-
-        // Render Chart
-        renderChart();
+        document.getElementById('totalMembers').innerText = totalMembers;
+        document.getElementById('totalPaid').innerText = '₹' + totalPaid;
+        document.getElementById('totalDue').innerText = '₹' + totalDue;
 
         // Members List
         let membersHtml = '';
-        if (currentMonthMembers.length === 0) {
-            membersHtml = '<p style="text-align:center; grid-column:1/-1;">इस महीने कोई सदस्य नहीं</p>';
-        } else {
-            currentMonthMembers.forEach(m => {
-                let dateStr = m.date.split('-').reverse().join('-');
-                let expiryStr = m.expiry ? m.expiry.split('-').reverse().join('-') : 'कोई एक्सपायरी नहीं';
-                
-                // Calculate expiry status
-                let expiryClass = '';
-                if (m.expiry) {
-                    let today = new Date();
-                    let exp = new Date(m.expiry);
-               
+        gymData.members.forEach(m => {
+            let dateStr = m.date.split('-').reverse().join('-');
+            membersHtml += `
+                <div class="member-card">
+                    <div class="member-name">${m.name}</div>
+                    <div class="member-detail"><span>📞 फोन</span> <strong>${m.phone}</strong></div>
+                    <div class="member-detail"><span>💰 राशी</span> <strong>₹${m.amount}</strong></div>
+                    <div class="member-detail"><span>📌 स्थिति</span> 
+                        <strong class="${m.status === 'पेड' ? 'paid' : 'due'}">${m.status}</strong>
+                    </div>
+                    <div class="member-detail"><span>📅 तारीख</span> <strong>${dateStr}</strong></div>
+                    ${isAdmin ? `
+                        <button class="btn btn-red" style="width:100%; margin-top:15px;" onclick="deleteMember(${m.id})">🗑️ हटाएँ</button>
+                    ` : ''}
+                    <button class="btn btn-green" style="width:100%; margin-top:10px;" onclick="sendReminder('${m.name}', '${m.phone}', ${m.amount}, '${m.status}')">💬 बकाया याद दिलाएँ</button>
+                </div>
+            `;
+        });
+        document.getElementById('membersList').innerHTML = membersHtml;
+    }
+
+    // ==================== ADD MEMBER ====================
+    window.addMember = function() {
+        if (!isAdmin) return;
+        
+        let name = document.getElementById('memberName').value.trim();
+        let phone = document.getElementById('memberPhone').value;
+        let amount = parseFloat(document.getElementById('memberAmount').value);
+        let date = document.getElementById('memberDate').value;
+        let status = document.getElementById('memberStatus').value;
+
+        if (!name || !phone || !amount || !date) {
+            alert('❌ सभी फील्ड भरो');
+            return;
+        }
+
+        let newId = Date.now();
+        gymData.members.push({
+            id: newId,
+            name: name,
+            phone: phone,
+            amount: amount,
+            status: status,
+            date: date
+        });
+
+        saveData();
+        renderAll();
+
+        // Clear form
+        document.getElementById('memberName').value = '';
+        document.getElementById('memberPhone').value = '';
+        document.getElementById('memberAmount').value = '';
+        document.getElementById('memberDate').value = '2026-02-16';
+    };
+
+    // ==================== DELETE MEMBER ====================
+    window.deleteMember = function(id) {
+        if (!isAdmin) return;
+        if (confirm('क्या सच में हटा दें?')) {
+            gymData.members = gymData.members.filter(m => m.id !== id);
+            saveData();
+            renderAll();
+        }
+    };
+
+    // ==================== SEND REMINDER ====================
+    window.sendReminder = function(name, phone, amount, status) {
+        if (status === 'पेड') {
+            alert('इस सदस्य का कोई बकाया नहीं है');
+            return;
+        }
+        let message = encodeURIComponent(`नमस्ते ${name} जी, आपका ₹${amount} बकाया है। कृपया जल्दी जमा करें। - ${gymData.gymName}`);
+        window.open(`https://wa.me/91${phone}?text=${message}`, '_blank');
+    };
+
+    // ==================== START ====================
+    renderAll();
+</script>
+</body>
+    </html>
