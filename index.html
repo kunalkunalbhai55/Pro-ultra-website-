@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>💪 गोल्ड जिम · अंतिम संस्करण</title>
+    <title>💪 गोल्ड जिम · फाइनल</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
         body { background: #0a0f1e; color: white; padding: 20px; }
@@ -12,11 +12,12 @@
         .owner-name { font-size: 28px; color: #ffd966; text-align: center; margin-bottom: 20px; }
         .whatsapp { background: #25D366; padding: 20px; border-radius: 60px; text-align: center; margin: 20px 0; }
         .whatsapp a { color: white; text-decoration: none; font-size: 28px; font-weight: bold; }
-        .viewer-message { background: #2a3a60; color: #ffaa66; padding: 15px; border-radius: 40px; text-align: center; margin: 20px 0; }
-        .password-box { background: #1a2a44; border: 3px solid gold; border-radius: 60px; padding: 30px; text-align: center; margin: 20px 0; }
-        .password-input { background: #0b1a32; border: 2px solid cyan; border-radius: 60px; padding: 15px; width: 300px; max-width: 100%; margin: 15px 0; color: white; }
+        .msg { background: #2a3a60; color: #ffaa66; padding: 15px; border-radius: 40px; text-align: center; margin: 20px 0; }
+        .box { background: #1a2a44; border: 3px solid gold; border-radius: 60px; padding: 30px; text-align: center; margin: 20px 0; }
+        input { background: #0b1a32; border: 2px solid cyan; border-radius: 60px; padding: 15px; width: 300px; max-width: 100%; margin: 10px 0; color: white; font-size: 18px; }
         .btn { background: gold; color: black; border: none; border-radius: 60px; padding: 15px 40px; font-size: 20px; cursor: pointer; margin: 5px; }
         .btn-green { background: #25D366; color: white; }
+        .btn-red { background: #bc3f3f; color: white; }
         .admin-panel { background: #1f2a44; border: 4px solid gold; border-radius: 60px; padding: 30px; margin: 25px 0; display: none; }
         .form-group { display: flex; flex-wrap: wrap; gap: 15px; margin: 20px 0; }
         .form-group input, .form-group select { flex: 1 1 200px; background: #0b1a32; border: 2px solid cyan; border-radius: 50px; padding: 15px; color: white; }
@@ -26,7 +27,7 @@
         .members-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px,1fr)); gap: 20px; margin-top: 20px; }
         .member-card { background: #10213b; border-radius: 40px; padding: 25px; border: 1px solid #4f8cff; }
         .member-name { font-size: 28px; font-weight: bold; color: cyan; margin-bottom: 15px; }
-        .member-detail { display: flex; justify-content: space-between; font-size: 18px; padding: 8px 0; border-bottom: 1px dashed #3f70b0; }
+        .row { display: flex; justify-content: space-between; font-size: 18px; padding: 8px 0; border-bottom: 1px dashed #3f70b0; }
         .paid { color: #a0ffb0; } .due { color: #ffaa66; }
         .footer { text-align: center; color: #7f9fd0; padding: 30px; }
         .hidden { display: none !important; }
@@ -34,35 +35,38 @@
 </head>
 <body>
 <div class="container">
-    <div class="gym-name" id="gymNameDisplay">💪 गोल्ड जिम</div>
-    <div class="owner-name" id="ownerNameDisplay">राजेश कुमार (मालिक)</div>
+    <div class="gym-name" id="gymName">💪 गोल्ड जिम</div>
+    <div class="owner-name" id="ownerName">राजेश कुमार (मालिक)</div>
 
     <div class="whatsapp">
         <a href="https://wa.me/919559401761" target="_blank">💬 व्हाट्सएप - 9559401761</a>
     </div>
 
-    <div class="viewer-message" id="viewerMessage">🔍 आप देख सकते हैं, एडिट या डिलीट नहीं कर सकते। केवल मालिक ही बदलाव कर सकता है।</div>
+    <div class="msg" id="viewerMsg">🔍 आप देख सकते हैं, डिलीट नहीं कर सकते।</div>
 
-    <div class="password-box" id="passwordBox">
+    <!-- एडमिन पैनल खोलने के लिए -->
+    <div class="box">
         <h2 style="color: gold;">🔐 एडमिन पैनल खोलें</h2>
-        <input type="password" class="password-input" id="passwordInput" placeholder="एडमिन पासवर्ड">
-        <button class="btn" onclick="checkAdmin()">✅ खोलें</button>
-        <p style="color:#aaccff;">(पासवर्ड: gym@123)</p>
+        <input type="password" id="adminPass" placeholder="पासवर्ड">
+        <button class="btn" onclick="openAdmin()">✅ खोलें</button>
+        <p style="color:#aaccff;">पासवर्ड: gym@123</p>
     </div>
 
-    <div class="password-box" id="ownerSetupBox" style="border-color:#25D366;">
-        <h2 style="color:#25D366;">👑 इस डिवाइस को मालिक बनाएं</h2>
-        <input type="password" class="password-input" id="ownerPass" placeholder="मालिक पासवर्ड">
+    <!-- मालिक बनने के लिए -->
+    <div class="box" id="ownerBox">
+        <h2 style="color: #25D366;">👑 इस डिवाइस को मालिक बनाएं</h2>
+        <input type="password" id="ownerPass" placeholder="मालिक पासवर्ड">
         <button class="btn btn-green" onclick="makeOwner()">👑 मालिक बनें</button>
-        <p style="color:#aaccff;">(पासवर्ड: owner@789)</p>
+        <p style="color:#aaccff;">पासवर्ड: owner@789</p>
     </div>
 
+    <!-- एडमिन पैनल (छुपा हुआ) -->
     <div class="admin-panel" id="adminPanel">
         <h2 style="color: gold;">⚙️ एडमिन पैनल</h2>
         <h3 style="color:cyan;">🏢 जिम जानकारी</h3>
         <div class="form-group">
-            <input id="gymNameInput" placeholder="जिम नाम" value="गोल्ड जिम">
-            <input id="ownerNameInput" placeholder="मालिक नाम" value="राजेश कुमार">
+            <input id="gymInput" placeholder="जिम नाम" value="गोल्ड जिम">
+            <input id="ownerInput" placeholder="मालिक नाम" value="राजेश कुमार">
             <button class="btn" onclick="updateGym()">✅ अपडेट</button>
         </div>
         <h3 style="color:cyan;">➕ नया सदस्य</h3>
@@ -75,118 +79,186 @@
                 <option value="पेड">✅ पेड</option>
                 <option value="बकाया">⏳ बकाया</option>
             </select>
-            <button class="btn btn-green" onclick="addMem()">➕ जोड़ें</button>
+            <button class="btn btn-green" onclick="addMember()">➕ जोड़ें</button>
         </div>
     </div>
 
+    <!-- स्टैट्स -->
     <div class="stats">
-        <div class="stat-box"><span class="stat-number" id="totalMembers">0</span><div>सदस्य</div></div>
+        <div class="stat-box"><span class="stat-number" id="totalMem">0</span><div>सदस्य</div></div>
         <div class="stat-box"><span class="stat-number" id="totalPaid">₹0</span><div>जमा</div></div>
         <div class="stat-box"><span class="stat-number" id="totalDue">₹0</span><div>बकाया</div></div>
     </div>
 
+    <!-- सदस्य सूची -->
     <h2 style="margin: 40px 0 20px;">📋 सदस्य सूची</h2>
     <div class="members-grid" id="membersList"></div>
-    <div class="footer">✨ अंतिम संस्करण · सिर्फ मालिक हटाए</div>
+    <div class="footer">✨ अंतिम संस्करण</div>
 </div>
 
 <script>
+    // ========== डेटा ==========
     let gymData = {
-        gymName: "गोल्ड जिम", ownerName: "राजेश कुमार", waNumber: "919559401761",
+        gymName: "गोल्ड जिम",
+        ownerName: "राजेश कुमार",
+        waNumber: "919559401761",
         members: [
-            {id:1,name:"सचिन",phone:"9876543210",amount:2000,status:"पेड",date:"2026-01-15"},
-            {id:2,name:"अमित",phone:"9876543211",amount:2500,status:"बकाया",date:"2026-01-10"},
-            {id:3,name:"विकास",phone:"9876543212",amount:3000,status:"पेड",date:"2026-02-05"},
-            {id:4,name:"राहुल",phone:"9876543213",amount:1500,status:"बकाया",date:"2026-02-01"}
+            { id: 1, name: "सचिन", phone: "9876543210", amount: 2000, status: "पेड", date: "2026-01-15" },
+            { id: 2, name: "अमित", phone: "9876543211", amount: 2500, status: "बकाया", date: "2026-01-10" },
+            { id: 3, name: "विकास", phone: "9876543212", amount: 3000, status: "पेड", date: "2026-02-05" },
+            { id: 4, name: "राहुल", phone: "9876543213", amount: 1500, status: "बकाया", date: "2026-02-01" }
         ]
     };
 
-    let DEVICE_ID = localStorage.getItem('deviceId') || 'device_'+Date.now()+'_'+Math.random();
-    localStorage.setItem('deviceId', DEVICE_ID);
-    let OWNER_KEY = 'gym_owner_गोल्ड जिम';
+    // ========== डिवाइस पहचान ==========
+    let DEVICE_ID = localStorage.getItem('deviceId');
+    if (!DEVICE_ID) {
+        DEVICE_ID = 'device_' + Date.now();
+        localStorage.setItem('deviceId', DEVICE_ID);
+    }
+
+    let OWNER_KEY = 'gym_owner';
     let isOwner = localStorage.getItem(OWNER_KEY) === DEVICE_ID;
 
-    function loadData() { let s = localStorage.getItem('gymProData'); if(s) gymData = JSON.parse(s); }
-    function saveData() { localStorage.setItem('gymProData', JSON.stringify(gymData)); }
+    // ========== लोड / सेव ==========
+    function loadData() {
+        let saved = localStorage.getItem('gymFinalData');
+        if (saved) gymData = JSON.parse(saved);
+    }
     loadData();
+    function saveData() { localStorage.setItem('gymFinalData', JSON.stringify(gymData)); }
 
+    // ========== रेंडर ==========
     function render() {
-        document.getElementById('gymNameDisplay').innerText = '💪 ' + gymData.gymName;
-        document.getElementById('ownerNameDisplay').innerText = gymData.ownerName + ' (मालिक)';
-        let total = gymData.members.length, paid = 0, due = 0;
-        gymData.members.forEach(m => { if(m.status==='पेड') paid+=m.amount; else due+=m.amount; });
-        document.getElementById('totalMembers').innerText = total;
+        // जिम जानकारी
+        document.getElementById('gymName').innerText = '💪 ' + gymData.gymName;
+        document.getElementById('ownerName').innerText = gymData.ownerName + ' (मालिक)';
+
+        // स्टैट्स
+        let total = gymData.members.length;
+        let paid = 0, due = 0;
+        gymData.members.forEach(m => {
+            if (m.status === 'पेड') paid += m.amount;
+            else due += m.amount;
+        });
+        document.getElementById('totalMem').innerText = total;
         document.getElementById('totalPaid').innerText = '₹' + paid;
         document.getElementById('totalDue').innerText = '₹' + due;
 
+        // सदस्य लिस्ट
         let html = '';
         gymData.members.forEach(m => {
             let dateStr = m.date.split('-').reverse().join('-');
-            html += `<div class="member-card"><div class="member-name">${m.name}</div>
-                <div class="member-detail"><span>📞</span> ${m.phone}</div>
-                <div class="member-detail"><span>💰</span> ₹${m.amount}</div>
-                <div class="member-detail"><span>📌</span> <strong class="${m.status==='पेड'?'paid':'due'}">${m.status}</strong></div>
-                <div class="member-detail"><span>📅</span> ${dateStr}</div>`;
-            if(isOwner) html += `<button class="btn btn-red" style="width:100%; margin-top:15px;" onclick="delMem(${m.id})">🗑️ हटाएँ</button>`;
-            html += `<button class="btn btn-green" style="width:100%; margin-top:10px;" onclick="sendWA('${m.name}','${m.phone}',${m.amount},'${m.status}')">💬 बकाया याद दिलाएँ</button>`;
+            html += `<div class="member-card">
+                <div class="member-name">${m.name}</div>
+                <div class="row"><span>📞</span> ${m.phone}</div>
+                <div class="row"><span>💰</span> ₹${m.amount}</div>
+                <div class="row"><span>📌</span> <strong class="${m.status==='पेड'?'paid':'due'}">${m.status}</strong></div>
+                <div class="row"><span>📅</span> ${dateStr}</div>`;
+            
+            // 👑 डिलीट बटन - सिर्फ मालिक को दिखेगा
+            if (isOwner) {
+                html += `<button class="btn btn-red" style="width:100%; margin-top:15px;" onclick="deleteMember(${m.id})">🗑️ हटाएँ</button>`;
+            }
+            
+            // 💬 व्हाट्सएप बटन - सबको दिखेगा
+            html += `<button class="btn btn-green" style="width:100%; margin-top:10px;" onclick="sendReminder('${m.name}','${m.phone}',${m.amount},'${m.status}')">💬 बकाया याद दिलाएँ</button>`;
             html += `</div>`;
         });
         document.getElementById('membersList').innerHTML = html;
 
-        if(isOwner) {
-            document.getElementById('viewerMessage').classList.add('hidden');
-            document.getElementById('ownerSetupBox').classList.add('hidden');
+        // मालिक के हिसाब से दिखाएँ/छुपाएँ
+        if (isOwner) {
+            document.getElementById('viewerMsg').classList.add('hidden');
+            document.getElementById('ownerBox').classList.add('hidden');
         } else {
-            document.getElementById('viewerMessage').classList.remove('hidden');
-            document.getElementById('ownerSetupBox').classList.remove('hidden');
+            document.getElementById('viewerMsg').classList.remove('hidden');
+            document.getElementById('ownerBox').classList.remove('hidden');
         }
     }
 
-    window.checkAdmin = function() {
-        if(document.getElementById('passwordInput').value === 'gym@123') {
-            document.getElementById('passwordBox').style.display = 'none';
+    // ========== एडमिन पैनल खोलें ==========
+    window.openAdmin = function() {
+        if (document.getElementById('adminPass').value === 'gym@123') {
             document.getElementById('adminPanel').style.display = 'block';
-        } else alert('❌ गलत पासवर्ड');
+        } else {
+            alert('❌ गलत पासवर्ड');
+        }
     };
 
+    // ========== मालिक बनें ==========
     window.makeOwner = function() {
-        if(document.getElementById('ownerPass').value === 'owner@789') {
+        if (document.getElementById('ownerPass').value === 'owner@789') {
             localStorage.setItem(OWNER_KEY, DEVICE_ID);
             isOwner = true;
             render();
             alert('✅ यह डिवाइस अब मालिक है');
-        } else alert('❌ गलत मालिक पासवर्ड');
+        } else {
+            alert('❌ गलत पासवर्ड');
+        }
     };
 
+    // ========== जिम अपडेट ==========
     window.updateGym = function() {
-        gymData.gymName = document.getElementById('gymNameInput').value || gymData.gymName;
-        gymData.ownerName = document.getElementById('ownerNameInput').value || gymData.ownerName;
-        saveData(); render(); alert('✅ अपडेट हुआ');
+        let newGym = document.getElementById('gymInput').value.trim();
+        let newOwner = document.getElementById('ownerInput').value.trim();
+        if (newGym) gymData.gymName = newGym;
+        if (newOwner) gymData.ownerName = newOwner;
+        saveData();
+        render();
+        alert('✅ अपडेट हो गया');
     };
 
-    window.addMem = function() {
+    // ========== सदस्य जोड़ें ==========
+    window.addMember = function() {
         let name = document.getElementById('memName').value.trim();
         let phone = document.getElementById('memPhone').value;
         let amount = parseFloat(document.getElementById('memAmount').value);
         let date = document.getElementById('memDate').value;
         let status = document.getElementById('memStatus').value;
-        if(!name || !phone || !amount || !date) { alert('❌ सब भरो'); return; }
-        gymData.members.push({ id: Date.now(), name, phone, amount, status, date });
-        saveData(); render();
-        document.getElementById('memName').value = ''; document.getElementById('memPhone').value = '';
-        document.getElementById('memAmount').value = ''; 
+
+        if (!name || !phone || !amount || !date) {
+            alert('❌ सब भरो');
+            return;
+        }
+
+        gymData.members.push({
+            id: Date.now(),
+            name, phone, amount, status, date
+        });
+
+        saveData();
+        render();
+
+        document.getElementById('memName').value = '';
+        document.getElementById('memPhone').value = '';
+        document.getElementById('memAmount').value = '';
     };
 
-    window.delMem = function(id) {
-        if(!isOwner) { alert('❌ आप मालिक नहीं हैं'); return; }
-        if(confirm('हटाएँ?')) { gymData.members = gymData.members.filter(m => m.id !== id); saveData(); render(); }
+    // ========== सदस्य हटाएँ ==========
+    window.deleteMember = function(id) {
+        if (!isOwner) {
+            alert('❌ आप मालिक नहीं हैं');
+            return;
+        }
+        if (confirm('हटाएँ?')) {
+            gymData.members = gymData.members.filter(m => m.id !== id);
+            saveData();
+            render();
+        }
     };
 
-    window.sendWA = function(name, phone, amount, status) {
-        if(status === 'पेड') { alert('बकाया नहीं'); return; }
-        window.open(`https://wa.me/91${phone}?text=${encodeURIComponent('नमस्ते '+name+' जी, ₹'+amount+' बकाया है।')}`);
+    // ========== व्हाट्सएप रिमाइंडर ==========
+    window.sendReminder = function(name, phone, amount, status) {
+        if (status === 'पेड') {
+            alert('कोई बकाया नहीं');
+            return;
+        }
+        let msg = encodeURIComponent(`नमस्ते ${name} जी, ₹${amount} बकाया है।`);
+        window.open(`https://wa.me/91${phone}?text=${msg}`, '_blank');
     };
 
+    // ========== शुरू ==========
     render();
 </script>
 </body>
