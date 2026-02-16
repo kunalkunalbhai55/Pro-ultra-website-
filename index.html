@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>💪 गोल्ड जिम · सिंपल प्रो</title>
+    <title>💪 गोल्ड जिम · फाइनल प्रो</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
         body { background: #0a0f1e; color: white; padding: 20px; }
@@ -12,15 +12,15 @@
         .gym-name { font-size: 56px; text-align: center; background: linear-gradient(135deg, #fff, cyan); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .owner-name { font-size: 28px; color: #ffd966; text-align: center; margin-bottom: 20px; }
 
-        /* यूजर को सिर्फ यह बटन दिखेगा */
-        .whatsapp-only {
+        /* WhatsApp Button - यह सबको दिखेगा */
+        .whatsapp-main {
             background: #25D366;
             padding: 20px;
             border-radius: 60px;
             text-align: center;
             margin: 20px 0;
         }
-        .whatsapp-only a {
+        .whatsapp-main a {
             color: white;
             text-decoration: none;
             font-size: 28px;
@@ -28,7 +28,7 @@
             display: block;
         }
 
-        /* पासवर्ड बॉक्स */
+        /* Password Box */
         .password-box {
             background: #1a2a44;
             border: 3px solid gold;
@@ -62,7 +62,7 @@
         .btn-green { background: #25D366; color: white; }
         .btn-red { background: #bc3f3f; color: white; }
 
-        /* एडमिन पैनल - सिर्फ पासवर्ड के बाद */
+        /* Admin Panel */
         .admin-panel {
             background: #1f2a44;
             border: 4px solid gold;
@@ -88,7 +88,7 @@
             font-size: 16px;
         }
 
-        /* स्टैट्स */
+        /* Stats */
         .stats {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -108,7 +108,7 @@
             color: cyan;
         }
 
-        /* सदस्य कार्ड */
+        /* Members Grid */
         .members-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -138,36 +138,39 @@
         .due { color: #ffaa66; }
 
         .footer { text-align: center; color: #7f9fd0; padding: 30px; }
+
+        /* Utility */
+        .hidden { display: none !important; }
     </style>
 </head>
 <body>
 <div class="container">
 
-    <!-- जिम का नाम -->
+    <!-- Gym Header -->
     <div class="gym-name" id="gymNameDisplay">💪 गोल्ड जिम</div>
     <div class="owner-name" id="ownerNameDisplay">राजेश कुमार (मालिक)</div>
 
-    <!-- 🔴 यूजर को सिर्फ यह बटन दिखेगा -->
-    <div class="whatsapp-only">
+    <!-- Main WhatsApp Button - यह सबको दिखेगा -->
+    <div class="whatsapp-main">
         <a href="https://wa.me/919559401761" target="_blank" id="whatsappLink">
             💬 व्हाट्सएप पर बात करें - 9559401761
         </a>
     </div>
 
-    <!-- 🔐 पासवर्ड बॉक्स - इसी से एडमिन पैनल खुलेगा -->
+    <!-- Password Box -->
     <div class="password-box" id="passwordBox">
         <h2 style="color: gold;">🔐 एडमिन पैनल खोलें</h2>
         <input type="password" class="password-input" id="passwordInput" placeholder="पासवर्ड डालें">
         <br>
-        <button class="btn" onclick="openAdminPanel()">✅ खोलें</button>
+        <button class="btn" onclick="toggleAdminPanel()">✅ खोलें/बंद करें</button>
         <p style="color: #aaccff; margin-top: 15px;">पासवर्ड: gym@123</p>
     </div>
 
-    <!-- ⚙️ एडमिन पैनल - पासवर्ड के बाद दिखेगा -->
+    <!-- Admin Panel - पासवर्ड के बाद दिखेगा/छुपेगा -->
     <div class="admin-panel" id="adminPanel">
-        <div class="admin-title">⚙️ एडमिन पैनल (सिर्फ आपको दिख रहा है)</div>
+        <div class="admin-title">⚙️ एडमिन पैनल</div>
         
-        <!-- जिम की जानकारी एडिट करें -->
+        <!-- Gym Info Edit -->
         <h3 style="color: cyan;">🏢 जिम की जानकारी</h3>
         <div class="form-group">
             <input type="text" id="gymNameInput" placeholder="जिम का नाम" value="गोल्ड जिम">
@@ -175,14 +178,14 @@
             <button class="btn" onclick="updateGymInfo()">✅ अपडेट</button>
         </div>
 
-        <!-- व्हाट्सएप नंबर एडिट करें -->
+        <!-- WhatsApp Number Edit -->
         <h3 style="color: cyan;">📱 व्हाट्सएप नंबर</h3>
         <div class="form-group">
             <input type="number" id="waNumberInput" placeholder="व्हाट्सएप नंबर" value="919559401761">
             <button class="btn btn-green" onclick="updateWANumber()">✅ नंबर अपडेट</button>
         </div>
 
-        <!-- नया सदस्य जोड़ें -->
+        <!-- Add Member -->
         <h3 style="color: cyan;">➕ नया सदस्य जोड़ें</h3>
         <div class="form-group">
             <input type="text" id="memberName" placeholder="नाम">
@@ -197,7 +200,7 @@
         </div>
     </div>
 
-    <!-- 📊 स्टैट्स -->
+    <!-- Stats -->
     <div class="stats">
         <div class="stat-box">
             <div class="stat-number" id="totalMembers">0</div>
@@ -213,11 +216,11 @@
         </div>
     </div>
 
-    <!-- 📋 सदस्य सूची - यूजर को भी दिखेगी, लेकिन बदल नहीं सकता -->
+    <!-- Members List -->
     <h2 style="margin: 40px 0 20px;">📋 सदस्य सूची</h2>
     <div class="members-grid" id="membersList"></div>
 
-    <div class="footer">✨ सिंपल प्रो · बस व्हाट्सएप + एडमिन</div>
+    <div class="footer">✨ फाइनल प्रो · बटन सिर्फ पैनल खुले पर</div>
 </div>
 
 <script>
@@ -234,9 +237,11 @@
         ]
     };
 
-    // लोकल स्टोरेज से लोड करो
+    let isAdminPanelOpen = false; // यह बताएगा कि पैनल खुला है या नहीं
+
+    // Load from localStorage
     function loadData() {
-        let saved = localStorage.getItem('gymSimpleData');
+        let saved = localStorage.getItem('gymFinalProData');
         if (saved) {
             gymData = JSON.parse(saved);
         }
@@ -244,7 +249,7 @@
     loadData();
 
     function saveData() {
-        localStorage.setItem('gymSimpleData', JSON.stringify(gymData));
+        localStorage.setItem('gymFinalProData', JSON.stringify(gymData));
     }
 
     // ==================== रेंडर ====================
@@ -272,7 +277,7 @@
         document.getElementById('totalPaid').innerText = '₹' + totalPaid;
         document.getElementById('totalDue').innerText = '₹' + totalDue;
 
-        // Members List - सबको दिखेगी, कोई एडिट/डिलीट बटन नहीं
+        // Members List - अब बटन पैनल के खुले/बंद होने पर depend करेंगे
         let membersHtml = '';
         gymData.members.forEach(m => {
             let dateStr = m.date.split('-').reverse().join('-');
@@ -285,18 +290,42 @@
                         <strong class="${m.status === 'पेड' ? 'paid' : 'due'}">${m.status}</strong>
                     </div>
                     <div class="row"><span>📅 तारीख</span> <strong>${dateStr}</strong></div>
-                </div>
             `;
+            
+            // 🔴 अहम लॉजिक: सिर्फ तब बटन दिखे जब एडमिन पैनल खुला हो
+            if (isAdminPanelOpen) {
+                // डिलीट बटन - सिर्फ पैनल खुले पर
+                membersHtml += `<button class="btn btn-red" style="width:100%; margin-top:15px;" onclick="deleteMember(${m.id})">🗑️ हटाएँ</button>`;
+                // व्हाट्सएप बटन - पैनल खुले पर भी रहेगा (एडमिन के लिए भी जरूरी)
+                membersHtml += `<button class="btn btn-green" style="width:100%; margin-top:10px;" onclick="sendReminder('${m.name}', '${m.phone}', ${m.amount}, '${m.status}')">💬 बकाया याद दिलाएँ</button>`;
+            }
+            
+            membersHtml += `</div>`;
         });
         document.getElementById('membersList').innerHTML = membersHtml;
     }
 
-    // ==================== पासवर्ड चेक ====================
-    window.openAdminPanel = function() {
+    // ==================== पैनल टॉगल ====================
+    window.toggleAdminPanel = function() {
         let pwd = document.getElementById('passwordInput').value;
         if (pwd === 'gym@123') {
-            document.getElementById('passwordBox').style.display = 'none';
-            document.getElementById('adminPanel').style.display = 'block';
+            // पैनल की स्थिति बदलो
+            isAdminPanelOpen = !isAdminPanelOpen;
+            
+            if (isAdminPanelOpen) {
+                document.getElementById('adminPanel').style.display = 'block';
+                document.getElementById('passwordBox').style.display = 'none';
+            } else {
+                document.getElementById('adminPanel').style.display = 'none';
+                document.getElementById('passwordBox').style.display = 'block';
+            }
+            
+            // पासवर्ड फील्ड खाली करो
+            document.getElementById('passwordInput').value = '';
+            
+            // रेंडर करो ताकि बटन दिखें/छुपें
+            renderAll();
+            
         } else {
             alert('❌ गलत पासवर्ड');
         }
@@ -357,8 +386,29 @@
         document.getElementById('memberDate').value = '2026-02-16';
     };
 
+    window.deleteMember = function(id) {
+        if (!isAdminPanelOpen) {
+            alert('❌ पहले एडमिन पैनल खोलो');
+            return;
+        }
+        if (confirm('क्या सच में हटा दें?')) {
+            gymData.members = gymData.members.filter(m => m.id !== id);
+            saveData();
+            renderAll();
+        }
+    };
+
+    window.sendReminder = function(name, phone, amount, status) {
+        if (status === 'पेड') {
+            alert('इस सदस्य का कोई बकाया नहीं है');
+            return;
+        }
+        let message = encodeURIComponent(`नमस्ते ${name} जी, आपका ₹${amount} बकाया है। कृपया जल्दी जमा करें।`);
+        window.open(`https://wa.me/91${phone}?text=${message}`, '_blank');
+    };
+
     // ==================== शुरू करो ====================
     renderAll();
 </script>
 </body>
-    </html>
+            </html>
