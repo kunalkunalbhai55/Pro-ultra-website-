@@ -377,4 +377,241 @@
     <!-- WhatsApp Button -->
     <div class="whatsapp-mirror">
         <a href="https://wa.me/919559401761" target="_blank">
-            💬 <span>
+            💬 <span>व्हाट्सएप</span> - 9559401761
+        </a>
+    </div>
+
+    <!-- Password Box -->
+    <div class="password-box" id="passwordBox">
+        <h2 style="color: gold;">🔐 एडमिन पैनल के लिए पासवर्ड डालें</h2>
+        <input type="password" class="password-input" id="passwordInput" placeholder="पासवर्ड">
+        <button class="admin-btn" onclick="checkPassword()">✅ खोलें</button>
+        <p style="color: #aaccff; margin-top: 15px;">💡 सिर्फ मालिक को पता होगा</p>
+    </div>
+
+    <!-- Admin Panel (Hidden) -->
+    <div class="admin-panel" id="adminPanel" style="display: none;">
+        <div class="admin-title">⚙️ एडमिन पैनल (PRO MAX)</div>
+
+        <!-- Gym Info -->
+        <h3 style="color:cyan;">🏢 जिम की जानकारी</h3>
+        <div class="admin-form">
+            <input class="admin-input" id="gymNameInput" placeholder="जिम का नाम">
+            <input class="admin-input" id="ownerNameInput" placeholder="मालिक का नाम">
+            <button class="admin-btn" onclick="updateGymInfo()">✅ अपडेट</button>
+        </div>
+
+        <!-- Notice Edit Toggle -->
+        <button class="admin-btn" onclick="toggleNoticeEdit()" style="margin: 20px 0;">📢 नोटिस एडिट करें</button>
+
+        <!-- Add Member with Expiry -->
+        <h3 style="color:cyan; margin-top: 30px;">➕ नया सदस्य (एक्सपायरी के साथ)</h3>
+        <div class="admin-form">
+            <input class="admin-input" id="memberName" placeholder="नाम">
+            <input class="admin-input" type="number" id="memberPhone" placeholder="फोन नंबर">
+            <input class="admin-input" type="number" id="memberAmount" placeholder="राशी">
+            <input class="admin-input" type="date" id="memberDate">
+            <input class="admin-input" type="date" id="memberExpiry">
+            <select class="admin-input" id="memberStatus">
+                <option value="पेड">✅ पेड</option>
+                <option value="बकाया">⏳ बकाया</option>
+            </select>
+            <button class="admin-btn" onclick="addMember()">➕ जोड़ें</button>
+        </div>
+
+        <!-- Bulk Reminder & Backup -->
+        <div class="backup-buttons">
+            <button class="admin-btn" onclick="sendBulkReminder()">📢 सभी बकायेदारों को याद दिलाएँ</button>
+            <button class="admin-btn" onclick="exportData()">💾 बैकअप डाउनलोड</button>
+            <button class="admin-btn" onclick="importData()">📂 बैकअप अपलोड</button>
+            <button class="admin-btn" onclick="printReport()">🖨️ पीडीएफ रिपोर्ट</button>
+        </div>
+    </div>
+
+    <!-- Month Tabs -->
+    <div class="month-tabs" id="monthTabs"></div>
+
+    <!-- Stats -->
+    <div class="stats-grid" id="monthStats"></div>
+
+    <!-- Revenue Chart -->
+    <div class="chart-container">
+        <h2 style="color: cyan; text-align: center;">📊 ग्रोथ चार्ट (महीने-दर-महीने)</h2>
+        <div class="chart-bars" id="chartBars"></div>
+    </div>
+
+    <!-- Members List -->
+    <h2 style="margin: 30px 0 20px;">📋 सदस्य सूची (एक्सपायरी के साथ)</h2>
+    <div class="members-grid" id="membersList"></div>
+
+    <div class="footer">✨ PRO MAX EDITION · सभी फीचर्स के साथ</div>
+</div>
+
+<script>
+    // ==================== डेटा स्ट्रक्चर ====================
+    let gymData = {
+        gymName: "गोल्ड जिम",
+        ownerName: "राजेश कुमार",
+        waNumber: "919559401761",
+        notice: "🔥 आज नई स्कीम शुरू! सालभर की मेंबरशिप पर 20% छूट 🔥",
+        members: {
+            "सचिन": {
+                phone: "9876543210",
+                history: [
+                    { month: "जनवरी 2026", amount: 2000, status: "पेड", date: "2026-01-15" }
+                ],
+                expiry: "2026-02-15"
+            },
+            "अमित": {
+                phone: "9876543211",
+                history: [
+                    { month: "जनवरी 2026", amount: 2500, status: "बकाया", date: "2026-01-10" }
+                ],
+                expiry: "2026-02-10"
+            },
+            "विकास": {
+                phone: "9876543212",
+                history: [
+                    { month: "फरवरी 2026", amount: 3000, status: "पेड", date: "2026-02-05" }
+                ],
+                expiry: "2026-03-05"
+            }
+        }
+    };
+
+    let currentMonth = "जनवरी 2026";
+    let monthsList = ["जनवरी 2026", "फरवरी 2026", "मार्च 2026"];
+    let isAdmin = false;
+
+    // Load & Save
+    function loadData() {
+        let saved = localStorage.getItem('gymProMaxData');
+        if (saved) {
+            gymData = JSON.parse(saved);
+            // Ensure monthsList is updated from history
+            updateMonthsList();
+        }
+    }
+    loadData();
+    function saveData() { 
+        localStorage.setItem('gymProMaxData', JSON.stringify(gymData)); 
+    }
+
+    function updateMonthsList() {
+        let allMonths = new Set();
+        for (let name in gymData.members) {
+            gymData.members[name].history.forEach(h => allMonths.add(h.month));
+        }
+        monthsList = Array.from(allMonths).sort();
+        if (monthsList.length === 0) monthsList = [currentMonth];
+    }
+
+    // ==================== PASSWORD CHECK ====================
+    window.checkPassword = function() {
+        let pwd = document.getElementById('passwordInput').value;
+        if (pwd === 'gym@123') {
+            document.getElementById('passwordBox').style.display = 'none';
+            document.getElementById('adminPanel').style.display = 'block';
+            isAdmin = true;
+            renderAll();
+        } else alert('❌ गलत पासवर्ड');
+    };
+
+    // ==================== NOTICE ====================
+    window.toggleNoticeEdit = function() {
+        let editDiv = document.getElementById('noticeEdit');
+        editDiv.style.display = editDiv.style.display === 'none' ? 'flex' : 'none';
+        document.getElementById('noticeInput').value = gymData.notice;
+    };
+
+    window.updateNotice = function() {
+        let newNotice = document.getElementById('noticeInput').value;
+        if (newNotice) {
+            gymData.notice = newNotice;
+            document.getElementById('noticeText').innerText = newNotice;
+            document.getElementById('noticeEdit').style.display = 'none';
+            saveData();
+        }
+    };
+
+    // ==================== RENDER ALL ====================
+    function renderAll() {
+        // Gym Info
+        document.getElementById('gymNameDisplay').innerText = '💪 ' + gymData.gymName;
+        document.getElementById('ownerNameDisplay').innerText = gymData.ownerName + ' (मालिक)';
+        document.getElementById('noticeText').innerText = gymData.notice;
+
+        // Month Tabs
+        let tabsHtml = '';
+        monthsList.forEach(m => {
+            tabsHtml += `<div class="month-btn ${m === currentMonth ? 'active' : ''}" onclick="switchMonth('${m}')">${m}</div>`;
+        });
+        if (isAdmin) {
+            tabsHtml += `<div class="month-btn" onclick="addNewMonth()">➕ नया महीना</div>`;
+        }
+        document.getElementById('monthTabs').innerHTML = tabsHtml;
+
+        // Calculate Stats for current month
+        let totalMembers = 0, totalPaid = 0, totalDue = 0;
+        let currentMonthMembers = [];
+
+        for (let name in gymData.members) {
+            let member = gymData.members[name];
+            let found = member.history.find(h => h.month === currentMonth);
+            if (found) {
+                totalMembers++;
+                if (found.status === 'पेड') totalPaid += found.amount;
+                else totalDue += found.amount;
+                currentMonthMembers.push({
+                    name: name,
+                    phone: member.phone,
+                    expiry: member.expiry,
+                    ...found
+                });
+            }
+        }
+
+        document.getElementById('monthStats').innerHTML = `
+            <div class="stat-card"><div class="stat-number">${totalMembers}</div><div>सदस्य</div></div>
+            <div class="stat-card"><div class="stat-number">₹${totalPaid}</div><div>जमा</div></div>
+            <div class="stat-card"><div class="stat-number">₹${totalDue}</div><div>बकाया</div></div>
+        `;
+
+        // Render Chart
+        renderChart();
+
+        // Members List
+        let membersHtml = '';
+        currentMonthMembers.forEach(m => {
+            let dateStr = m.date.split('-').reverse().join('-');
+            let expiryStr = m.expiry ? m.expiry.split('-').reverse().join('-') : 'कोई एक्सपायरी नहीं';
+            let expiryClass = '';
+            if (m.expiry) {
+                let today = new Date();
+                let exp = new Date(m.expiry);
+                let diffDays = Math.ceil((exp - today) / (1000*60*60*24));
+                if (diffDays <= 7 && diffDays >= 0) expiryClass = 'badge-due';
+                else if (diffDays < 0) expiryClass = 'badge-due'; // expired
+                else expiryClass = 'badge-paid';
+            }
+            membersHtml += `
+            <div class="member-card">
+                <div class="member-name">${m.name}</div>
+                <div class="member-row"><span>💰 राशी</span> <strong>₹${m.amount}</strong></div>
+                <div class="member-row"><span>📌 स्थिति</span> 
+                    <strong class="${m.status === 'पेड' ? 'badge-paid' : 'badge-due'}">${m.status}</strong>
+                </div>
+                <div class="member-date">📅 तारीख: ${dateStr}</div>
+                <div class="member-expiry ${expiryClass}">⏳ एक्सपायरी: ${expiryStr}</div>
+                <div class="member-phone">📞 ${m.phone}</div>
+                ${isAdmin ? `
+                    <button class="delete-btn" onclick="deleteMember('${m.name}')">🗑️ सदस्य हटाएँ</button>
+                ` : ''}
+                <button class="reminder-btn" onclick="sendReminder('${m.name}', '${m.phone}', ${m.amount}, '${m.status}')">💬 बकाया याद दिलाएँ</button>
+            </div>`;
+        });
+        document.getElementById('membersList').innerHTML = membersHtml || '<p style="text-align:center;">इस महीने कोई सदस्य नहीं</p>';
+    }
+
+    // ==================== CHART ====================
+    functio
